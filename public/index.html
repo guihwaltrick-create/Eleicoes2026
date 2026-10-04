@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Apuração Presidencial 2026</title>
+<style>
+:root{--bg:#f5f6f8;--card:#fff;--text:#202124;--muted:#6b7280;--line:#e5e7eb;--lula:#c62828;--flavio:#1f5fae;--accent:#647f2e}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}
+.wrap{max-width:1180px;margin:auto;padding:24px}.top{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:18px}
+h1{font-size:24px;margin:0}.sub{color:var(--muted);font-size:13px;margin-top:5px}.btn{border:0;background:#222;color:#fff;border-radius:10px;padding:10px 15px;font-weight:700;cursor:pointer}
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:16px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:0 3px 12px #00000008}
+.kicker{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}.big{font-size:34px;font-weight:800;margin:5px 0}
+.progress{height:12px;background:#e8eaed;border-radius:99px;overflow:hidden}.progress>i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.candidates{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}.cand{padding:15px;border:1px solid var(--line);border-radius:13px}.cand b{font-size:23px}.lula b{color:var(--lula)}.flavio b{color:var(--flavio)}
+.section{margin-top:18px}.toolbar{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:10px}.toolbar h2{margin:0;font-size:18px}
+select{padding:8px 10px;border:1px solid var(--line);border-radius:9px;background:#fff}
+.tablebox{overflow:auto;background:#fff;border:1px solid var(--line);border-radius:15px}table{border-collapse:collapse;width:100%;min-width:830px}th,td{padding:12px 13px;border-bottom:1px solid var(--line);text-align:right;font-size:13px}th{position:sticky;top:0;background:#fafafa;color:#555;font-size:11px;text-transform:uppercase;letter-spacing:.04em}th:first-child,td:first-child{text-align:left}.uf{font-weight:800}.mini{display:flex;align-items:center;gap:8px;justify-content:flex-end}.mini span{width:70px;height:7px;background:#e8eaed;border-radius:99px;overflow:hidden}.mini i{display:block;height:100%;background:var(--accent)}.red{color:var(--lula);font-weight:700}.blue{color:var(--flavio);font-weight:700}.error{margin-top:12px;padding:12px;background:#fff4f4;border:1px solid #ffd5d5;border-radius:10px;font-size:12px}.foot{color:var(--muted);font-size:11px;margin-top:12px}
+@media(max-width:760px){.wrap{padding:14px}.grid{grid-template-columns:1fr}.top{align-items:flex-start}.candidates{grid-template-columns:1fr 1fr}.big{font-size:28px}}
+.tabs{display:flex;gap:8px;margin-bottom:18px}.tabs a{padding:10px 16px;border-radius:10px;background:#fff;border:1px solid var(--line);color:var(--text);text-decoration:none;font-weight:700}.tabs a.active{background:#222;color:#fff}.projection-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.comparison{display:flex;height:20px;border-radius:8px;overflow:hidden;background:#aaa;margin:16px 0}.comparison .lula{background:var(--lula)}.comparison .flavio{background:var(--flavio)}.method{line-height:1.6;margin:18px 0}.delta{font-size:13px;color:var(--muted);margin-top:8px}[hidden]{display:none!important}@media(max-width:760px){.projection-grid{grid-template-columns:1fr}}
+tr.leader-lula{background:#fff0f0}tr.leader-flavio{background:#edf5ff}
+.state-group th{position:static;text-align:left;font-size:13px;padding:15px 13px;letter-spacing:0;text-transform:none}.state-group.leader-lula th{background:#ffe0e0;color:#a51d1d}.state-group.leader-flavio th{background:#dceaff;color:#174d90}
+
+:root{--bg:#f0f4f8;--text:#172b43;--muted:#65768a;--line:#dfe7ef;--accent:#268477;--others:#7958a5}
+body{background:radial-gradient(ellipse at top left,#e6effa 0,transparent 55%),var(--bg);line-height:1.45}
+.wrap{max-width:1480px;padding:32px 28px 48px}.top{margin-bottom:24px}h1{font-size:clamp(22px,3vw,32px);letter-spacing:-.7px}.top .sub{margin-top:8px}
+.btn{background:#172b43;padding:12px 22px;box-shadow:0 4px 12px #172b4318}.btn:hover{background:#294663}a:focus-visible,button:focus-visible,select:focus-visible{outline:3px solid #7da9d8;outline-offset:3px}
+.tabs{width:fit-content;background:#e3eaf2;border-radius:14px;padding:5px;gap:4px;margin-bottom:24px}.tabs a{border:0;background:transparent;padding:10px 22px;font-size:14px}.tabs a.active{background:#fff;color:#172b43;box-shadow:0 2px 7px #172b4312}
+.grid{grid-template-columns:minmax(0,2.6fr) minmax(250px,1fr);gap:20px}.card{padding:25px;border-radius:20px;box-shadow:0 6px 24px #19314b06}.big{font-size:clamp(28px,3vw,40px);letter-spacing:-1px;font-variant-numeric:tabular-nums}.kicker{font-size:11px;font-weight:600;letter-spacing:.09em}.progress{height:10px;margin-top:9px}
+.candidates{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:24px}.cand{padding:18px;border:0;border-top:3px solid;border-radius:12px}.cand.lula{background:#fff1f1;border-color:var(--lula)}.cand.flavio{background:#eef5ff;border-color:var(--flavio)}.cand.others{background:#f4effb;border-color:var(--others)}.cand b{display:block;font-size:28px;margin:6px 0}.others b,.purple{color:var(--others);font-weight:700}
+.section{margin-top:28px}.toolbar{margin-bottom:16px;align-items:center}.toolbar h2{font-size:21px;letter-spacing:-.3px}select{padding:10px 14px;color:var(--text);font-size:13px}.tablebox{border-radius:18px;box-shadow:0 6px 24px #19314b06}table{min-width:1080px}th{background:#f7f9fc;font-size:10px;padding:15px 14px}td{padding:15px 14px;font-variant-numeric:tabular-nums;white-space:nowrap}.uf{font-size:14px}.cell-votes{display:block;font-size:11px;font-weight:400;color:var(--muted);margin-top:4px}.state-group th{padding:16px 14px;font-size:13px}tbody tr:not(.state-group):hover{filter:brightness(.975)}.mini span{background:#dbe4ed}.foot{line-height:1.6;margin-top:18px}
+.projection-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}.projection-grid .big{font-size:clamp(25px,2.6vw,36px)}.projection-grid .card:has(.red){border-top:3px solid var(--lula)}.projection-grid .card:has(.blue){border-top:3px solid var(--flavio)}.projection-grid .card:has(.purple){border-top:3px solid var(--others)}.comparison{height:24px;background:#7958a5}.comparison .others{background:var(--others)}.method{font-size:14px}.method .sub{display:block;margin-top:12px}
+@media(max-width:1050px){.grid{grid-template-columns:1fr}.projection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){.wrap{padding:20px 14px 32px}.card{padding:18px}.top{gap:10px}.btn{padding:10px 14px}.candidates{grid-template-columns:1fr}.cand{display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 16px}.cand b{grid-column:2;grid-row:1 / 3;margin:0}.cand .sub{grid-column:1}.projection-grid{grid-template-columns:1fr}.toolbar{align-items:flex-start;flex-direction:column}.tabs{width:100%}.tabs a{flex:1;text-align:center;padding:10px}.state-group th{white-space:normal}}
+.creator-signature{display:flex;align-items:center;justify-content:space-between;gap:20px;margin-top:32px;padding:20px 24px;border-radius:18px;background:#172b43;color:#fff}.creator-brand{display:flex;align-items:center;gap:18px;text-decoration:none;color:inherit}.creator-brand img{width:100px;height:58px;object-fit:contain}.creator-signature .sub{color:#bdcee1}.creator-link{color:#fff;text-decoration:none;font-size:13px;border:1px solid #ffffff40;border-radius:10px;padding:10px 16px}.about-layout{display:grid;grid-template-columns:minmax(220px,.8fr) minmax(0,1.4fr);gap:28px;align-items:center}.about-logo{background:#172b43;border-radius:18px;padding:32px;text-align:center}.about-logo img{width:100%;max-width:320px;height:auto}.about-copy h2{font-size:30px;letter-spacing:-.6px;margin:10px 0}.about-copy p{color:var(--muted);line-height:1.7}.contact-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:22px}.contact-actions a{text-decoration:none;display:inline-block}.contact-secondary{padding:12px 18px;border:1px solid var(--line);border-radius:10px;color:var(--text);font-weight:700}.about-note{margin-top:24px;padding-top:20px;border-top:1px solid var(--line)}@media(max-width:600px){.about-layout{grid-template-columns:1fr}.creator-signature{align-items:flex-start;flex-direction:column}.creator-brand{gap:12px}.creator-brand img{width:80px}.tabs a{padding:10px 8px}.about-copy h2{font-size:26px}}
+.group-heading{display:flex;align-items:center;justify-content:space-between;gap:18px}.group-title{flex-shrink:0}.group-summary{display:flex;justify-content:flex-end;align-items:center;gap:10px 18px;flex-wrap:wrap;margin-left:auto;text-align:right}.group-summary span{white-space:nowrap}.group-total{color:var(--text)}@media(max-width:760px){.group-heading{align-items:flex-start;flex-direction:column;gap:10px}.group-summary{width:100%;gap:8px 14px}}
+.photo-card{position:relative}.candidate-photo{display:block;width:64px;height:64px;object-fit:cover;object-position:center 22%;border-radius:50%;border:3px solid #fff;box-shadow:0 2px 8px #172b4320;margin-bottom:12px}.cand.photo-card .candidate-photo{float:right;margin:0 0 12px 12px}.cand.photo-card .kicker{min-height:32px}.projection-grid .candidate-photo{margin-bottom:14px}@media(max-width:600px){.cand.photo-card{display:block;min-height:112px}.cand.photo-card b{margin:6px 0}.cand.photo-card .candidate-photo{width:70px;height:70px}.cand.photo-card .kicker{min-height:0}}
+.candidate-photo{width:76px;height:76px;min-width:76px;min-height:76px;max-width:none;aspect-ratio:1 / 1;flex-shrink:0;object-fit:contain;object-position:center;background:#fff}.cand.photo-card .candidate-photo{width:76px;height:76px}
+
+/* Paleta geral inspirada na referência do TSE. */
+:root{--bg:#f4f4f4;--text:#292d32;--muted:#68717d;--line:#e5e5e5;--accent:#eab500;--general-yellow:#eab500}
+body{background:var(--bg);border-top:8px solid var(--general-yellow)}
+.card,.tablebox{background:#fff;box-shadow:0 5px 20px #00000007}
+.btn{background:var(--general-yellow);color:#292d32;box-shadow:0 3px 9px #00000012}.btn:hover{background:#d5a400}
+.tabs{background:#eaeaea}.tabs a.active{background:#fff;color:#292d32;box-shadow:0 2px 7px #0000000d;border-bottom:3px solid var(--general-yellow)}
+a:focus-visible,button:focus-visible,select:focus-visible{outline-color:var(--general-yellow)}
+.progress,.mini span{background:#e7e7e7}.progress>i,.mini i{background:var(--general-yellow)}
+th{background:#fafafa}.group-total{color:var(--text)}
+.projection-grid .card:has(#projTotal){border-top:3px solid var(--general-yellow)}
+#projectionStatus{padding:10px 14px;background:#fff8df;border-left:3px solid var(--general-yellow);border-radius:6px}
+.results-table th:first-child,.results-table td:first-child{width:64px;padding-right:6px}.results-table th:nth-child(2),.results-table td:nth-child(2){width:150px;text-align:left;padding-left:8px}.results-table td:nth-child(2) .mini{justify-content:flex-start;gap:8px}.results-table td:nth-child(2) .mini span{width:64px}
+
+.state-controls{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.mobile-columns{display:none;border:1px solid var(--line);border-radius:9px;background:#fff;color:var(--text);padding:10px 12px;font-weight:600;cursor:pointer}
+@media(max-width:600px){
+ .state-controls{width:100%;justify-content:space-between;gap:8px}.mobile-columns{display:block;font-size:12px}.state-controls select{max-width:170px;font-size:12px}
+ .results-table:not(.mobile-expanded){width:100%;min-width:0;table-layout:fixed}
+ .results-table:not(.mobile-expanded) colgroup{display:none}
+ .results-table:not(.mobile-expanded) thead th:nth-child(n+5),.results-table:not(.mobile-expanded) tbody td:nth-child(n+5){display:none}
+ .results-table:not(.mobile-expanded) th,.results-table:not(.mobile-expanded) td{padding:14px 8px;font-size:12px;white-space:nowrap}
+ .results-table:not(.mobile-expanded) thead th{font-size:9px;letter-spacing:0}
+ .results-table:not(.mobile-expanded) th:first-child,.results-table:not(.mobile-expanded) td:first-child{width:16%;padding-left:12px;padding-right:4px}
+ .results-table:not(.mobile-expanded) th:nth-child(2),.results-table:not(.mobile-expanded) td:nth-child(2){width:28%;padding-left:4px;text-align:left}
+ .results-table:not(.mobile-expanded) thead th:nth-child(3),.results-table:not(.mobile-expanded) thead th:nth-child(4){width:28%}
+ .results-table:not(.mobile-expanded) .cell-votes{display:none}
+ .results-table:not(.mobile-expanded) td:nth-child(2) .mini{display:block}
+ .results-table:not(.mobile-expanded) td:nth-child(2) .mini span{display:block;width:52px;height:4px;margin-top:6px}
+ .results-table:not(.mobile-expanded) .state-group th{white-space:normal;padding:13px 12px;font-size:11px}
+ .results-table:not(.mobile-expanded) .group-heading{gap:8px}
+ .results-table:not(.mobile-expanded) .group-title{flex-shrink:1}
+ .results-table:not(.mobile-expanded) .group-summary{justify-content:flex-start;text-align:left;gap:5px 12px;font-size:10px}
+ .results-table:not(.mobile-expanded) .group-total{width:100%}
+}
+@media(max-width:600px){
+ .results-table:not(.mobile-expanded) th:nth-child(2),.results-table:not(.mobile-expanded) td:nth-child(2){width:25%}
+ .results-table:not(.mobile-expanded) thead th:nth-child(3){width:30%}
+ .results-table:not(.mobile-expanded) thead th:nth-child(4){width:29%}
+ .results-table:not(.mobile-expanded) thead th:nth-child(3),.results-table:not(.mobile-expanded) tbody td:nth-child(3){text-align:left;padding-left:8px}
+}
+@media(max-width:600px){
+ .results-table:not(.mobile-expanded) th:first-child,.results-table:not(.mobile-expanded) td:first-child{width:15%;padding-left:12px;padding-right:4px}
+ .results-table:not(.mobile-expanded) th:nth-child(2),.results-table:not(.mobile-expanded) td:nth-child(2){width:29%;padding-left:6px;padding-right:6px;text-align:left}
+ .results-table:not(.mobile-expanded) thead th:nth-child(3),.results-table:not(.mobile-expanded) tbody td:nth-child(3),.results-table:not(.mobile-expanded) thead th:nth-child(4),.results-table:not(.mobile-expanded) tbody td:nth-child(4){width:28%;text-align:center;padding-left:6px;padding-right:6px}
+}
+</style>
+</head>
+<body><main class="wrap">
+<div class="top"><div><h1>Apuração Presidencial — 2026</h1><div class="sub" id="updated">Carregando dados oficiais do TSE…</div></div><button class="btn" onclick="load()">Atualizar</button></div>
+<nav class="tabs" aria-label="Telas"><a href="#apuracao" id="tabApuracao">Apuração atual</a><a href="#projecao" id="tabProjecao">Projeção</a><a href="#sobre" id="tabSobre">Sobre</a></nav>
+<div id="apuracaoScreen"><div class="grid">
+  <section class="card">
+    <div class="kicker">Brasil · votos válidos</div><div class="big" id="validos">—</div>
+    <div class="kicker">Seções totalizadas <strong id="pst">—</strong></div><div class="progress"><i id="bar" style="width:0"></i></div>
+    <div class="candidates">
+      <div class="cand lula photo-card"><img class="candidate-photo" src="/lula-tse.jpg" alt="Lula" width="64" height="64"><div class="kicker">Lula</div><b id="lulaPct">—</b><div id="lulaVotos" class="sub">— votos</div></div>
+      <div class="cand flavio photo-card"><img class="candidate-photo" src="/flavio-tse.jpg" alt="Flávio Bolsonaro" width="64" height="64"><div class="kicker">Flávio Bolsonaro</div><b id="flavioPct">—</b><div id="flavioVotos" class="sub">— votos</div></div>
+      <div class="cand others"><div class="kicker">Demais candidatos</div><b id="othersPct">—</b><div id="othersVotos" class="sub">— votos</div></div>
+    </div>
+  </section>
+  <section class="card"><div class="kicker">Leitura da parcial</div><div class="big" id="ufsOk">—</div><div class="sub">UFs carregadas</div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="kicker">Fonte</div><div style="font-weight:700;margin-top:5px">Tribunal Superior Eleitoral</div><div class="sub">Arquivos JSON EA20 · eleição 6257</div></section>
+</div>
+
+<section class="section">
+ <div class="toolbar"><div><h2>Apuração por estado</h2><div class="sub">Participação no total nacional já apurado + andamento da totalização</div></div>
+ <div class="state-controls"><select id="sort" onchange="render()"><option value="uf">Ordenar: UF</option><option value="peso">Maior peso no Brasil</option><option value="apuracao">Maior % fechado</option><option value="lula">Maior Lula %</option><option value="flavio">Maior Flávio %</option></select><button type="button" class="mobile-columns" id="mobileColumns" aria-pressed="false" onclick="toggleMobileColumns()">Ver todas as colunas</button></div></div>
+ <div class="tablebox"><table class="results-table"><colgroup><col style="width:64px"><col style="width:150px"><col span="6"></colgroup><thead><tr><th>Estado</th><th>% fechado</th><th>Lula</th><th>Flávio</th><th>Demais candidatos</th><th>Votos válidos</th><th>% total BR</th><th>Seções totalizadas</th></tr></thead><tbody id="rows"></tbody></table></div>
+ <div id="errors"></div>
+ <div class="foot">Os números são parciais e podem mudar a cada atualização. Este painel apenas apresenta os arquivos públicos do TSE e não possui vínculo com a Justiça Eleitoral.</div>
+</section>
+</div>
+<section id="projecaoScreen" hidden>
+ <div class="toolbar"><div><h2>Projeção com a parcial atual</h2><div class="sub">Estimativa para 100% das seções, mantendo o comportamento de cada UF.</div></div></div>
+ <div id="projectionStatus" class="sub" role="status">Aguardando dados…</div>
+ <div class="projection-grid section">
+  <section class="card photo-card"><img class="candidate-photo" src="/lula-tse.jpg" alt="Lula" width="64" height="64"><div class="kicker">Lula · projeção por UF</div><div class="big red" id="projLula">—</div><div class="sub" id="projLulaVotes">—</div><div class="delta" id="projLulaDelta">—</div></section>
+  <section class="card photo-card"><img class="candidate-photo" src="/flavio-tse.jpg" alt="Flávio Bolsonaro" width="64" height="64"><div class="kicker">Flávio · projeção por UF</div><div class="big blue" id="projFlavio">—</div><div class="sub" id="projFlavioVotes">—</div><div class="delta" id="projFlavioDelta">—</div></section>
+  <section class="card"><div class="kicker">Demais candidatos · projeção por UF</div><div class="big purple" id="projDemais">—</div><div class="sub" id="projDemaisVotes">—</div><div class="delta" id="projDemaisDelta">—</div></section>
+  <section class="card"><div class="kicker">Votos válidos estimados</div><div class="big" id="projTotal">—</div><div class="sub" id="projRemaining">—</div></section>
+ </div>
+ <section class="card section"><div class="kicker">Distribuição projetada · todos os votos válidos</div><div class="comparison" aria-label="Distribuição projetada"><span class="lula" id="projLulaBar"></span><span class="flavio" id="projFlavioBar"></span><span class="others" id="projDemaisBar"></span></div><div class="sub" id="projOthers">—</div><p id="projMargin"></p><div class="sub" id="projNational">—</div></section>
+ <div class="card method"><strong>Como a projeção é calculada</strong><br>Em cada UF, dividimos os votos já apurados pela fração exata de seções totalizadas. Os votos restantes estimados mantêm a distribuição atual dos candidatos naquela UF e são acrescentados à parcial oficial do Brasil. Os percentuais incluem os demais candidatos. A comparação nacional mantém a distribuição atual do Brasil e usa apenas o avanço nacional.<br><span class="sub">É uma extrapolação matemática, sem margem de confiança ou previsão de vencedor. Seções ainda não apuradas podem ter tamanho e preferências diferentes. Diferenças de horário entre arquivos e votos do exterior permanecem na base nacional, sem extrapolação própria. UFs sem dados suficientes são sinalizadas e não são extrapoladas.</span></div>
+ <div class="toolbar"><div><h2>Projeção por estado</h2><div class="sub">Ordenado pelo volume estimado de votos ainda por apurar.</div></div></div>
+ <div class="tablebox"><table><thead><tr><th>UF</th><th>Apurado</th><th>Válidos atuais</th><th>Válidos projetados</th><th>Restantes estimados</th><th>Lula · votos projetados</th><th>Flávio · votos projetados</th><th>Demais candidatos · projeção</th></tr></thead><tbody id="projectionRows"></tbody></table></div>
+</section>
+<section id="sobreScreen" hidden>
+ <div class="card about-layout">
+  <div class="about-logo"><img src="/Icone_azul_branco.png" alt="GW Soluções Digitais" width="1673" height="941"></div>
+  <div class="about-copy"><div class="kicker">Sobre o criador · GW Soluções Digitais</div><h2>Guilherme Waltrick</h2><p>Criador deste painel de apuração e projeção presidencial. O projeto reúne os dados públicos do TSE em uma interface para acompanhar os resultados do Brasil e de cada estado.</p><p>Quer conhecer meu trabalho ou conversar sobre um projeto? Entre em contato.</p><div class="contact-actions"><a class="btn" href="https://wa.me/5549999070882" target="_blank" rel="noopener noreferrer">Conversar no WhatsApp</a><a class="contact-secondary" href="tel:+5549999070882">(49) 99907-0882</a></div><p class="sub">Fotos dos candidatos: <a href="https://resultados.tse.jus.br/oficial/app/index.html" target="_blank" rel="noopener noreferrer">Tribunal Superior Eleitoral · eleição 6257</a>.</p><p class="about-note">Este é um projeto independente. Os dados de apuração são fornecidos pelo TSE; as projeções são estimativas matemáticas descritas na tela de projeção.</p></div>
+ </div>
+</section>
+<footer class="creator-signature"><a class="creator-brand" href="#sobre"><img src="/Icone_azul_branco.png" alt="GW Soluções Digitais" width="1673" height="941"><span><strong>Desenvolvido por Guilherme Waltrick</strong><span class="sub" style="display:block">GW Soluções Digitais · (49) 99907-0882</span></span></a><a class="creator-link" href="#sobre">Conheça o criador →</a></footer>
+</main>
+<script src="/projection.js"></script>
+<script>
+let DATA=null;
+const nf=new Intl.NumberFormat("pt-BR"), pf=x=>`${Number(x||0).toFixed(2).replace(".",",")}%`;
+const otherVotes=s=>Math.max(0,s.validos-s.lula.votos-s.flavio.votos);
+const otherPct=s=>s.validos>0?otherVotes(s)/s.validos*100:0;
+function fileAge(timestamp,now=Date.now()){
+ const match=String(timestamp||"").match(/^(\d{2})\/(\d{2})\/(\d{4}) (\d{2}):(\d{2}):(\d{2})$/);
+ if(!match)return "";
+ const [,day,month,year,hour,minute,second]=match;
+ const generated=Date.parse(year+"-"+month+"-"+day+"T"+hour+":"+minute+":"+second+"-03:00");
+ if(!Number.isFinite(generated))return "";
+ const minutes=Math.max(0,Math.floor((now-generated)/60000));
+ return minutes===0?" (há menos de 1 minuto)":" (há "+minutes+" "+(minutes===1?"minuto":"minutos")+")";
+}
+function updateFileTime(){
+ const timestamp=DATA?.brasil?.atualizadoEm;
+ document.getElementById("updated").textContent=timestamp?"Arquivo nacional do TSE · "+timestamp+fileAge(timestamp):"Data e hora do arquivo nacional indisponíveis";
+}
+async function load(){
+ document.getElementById("updated").textContent="Atualizando…";
+ try{
+  const r=await fetch("/api/resultados?_"+Date.now()); DATA=await r.json();
+  if(!r.ok) throw new Error(DATA.error||"Erro");
+  const b=DATA.brasil;
+  updateFileTime();
+  if(b){
+   const cards=[{selector:".cand.lula",votos:b.lula.votos},{selector:".cand.flavio",votos:b.flavio.votos},{selector:".cand.others",votos:otherVotes(b)}].sort((a,b)=>b.votos-a.votos);
+   const container=document.querySelector(".candidates");
+   cards.forEach(card=>container.appendChild(document.querySelector(card.selector)));
+   validos.textContent=nf.format(b.validos); pst.textContent=pf(b.secoesPct); bar.style.width=Math.min(100,b.secoesPct)+"%";
+   lulaPct.textContent=pf(b.lula.percentual); lulaVotos.textContent=nf.format(b.lula.votos)+" votos";
+   document.getElementById("othersPct").textContent=pf(otherPct(b)); document.getElementById("othersVotos").textContent=nf.format(otherVotes(b))+" votos";
+   flavioPct.textContent=pf(b.flavio.percentual); flavioVotos.textContent=nf.format(b.flavio.votos)+" votos";
+  }
+  ufsOk.textContent=DATA.estados.length+"/27"; render(); renderProjection();
+ }catch(e){document.getElementById("updated").textContent="Falha: "+e.message}
+}
+function leaderClass(state){
+ return state.lula.votos>state.flavio.votos?"leader-lula":state.flavio.votos>state.lula.votos?"leader-flavio":"";
+}
+function groupedRows(states,renderRow){
+ const groups=[["leader-lula","Lula à frente"],["leader-flavio","Flávio Bolsonaro à frente"],["","Empate entre Lula e Flávio / sem votos"]];
+ return groups.map(([key,title])=>{
+  const group=states.filter(state=>leaderClass(state)===key);
+  if(!group.length)return "";
+  const total=group.reduce((sum,state)=>sum+state.validos,0);
+  const lula=group.reduce((sum,state)=>sum+state.lula.votos,0);
+  const flavio=group.reduce((sum,state)=>sum+state.flavio.votos,0);
+  const demais=group.reduce((sum,state)=>sum+otherVotes(state),0);
+  const percent=votes=>total>0?pf(votes/total*100):"—";
+  const candidates=[{label:"Lula",votes:lula,color:"red"},{label:"Flávio Bolsonaro",votes:flavio,color:"blue"},{label:"Demais candidatos",votes:demais,color:"purple"}].sort((a,b)=>b.votes-a.votes);
+  const summary=candidates.map(candidate=>'<span class="'+candidate.color+'">'+candidate.label+': '+percent(candidate.votes)+'</span>').join("");
+  return '<tr class="state-group '+key+'"><th colspan="8" scope="rowgroup"><div class="group-heading"><span class="group-title">'+title+' · '+group.length+' '+(group.length===1?'estado':'estados')+'</span><div class="group-summary">'+summary+'<span class="group-total">'+nf.format(total)+' votos válidos</span></div></div></th></tr>'+group.map(renderRow).join("");
+ }).join("");
+}
+function toggleMobileColumns(){
+ const table=document.querySelector(".results-table");
+ const expanded=table.classList.toggle("mobile-expanded");
+ const button=document.getElementById("mobileColumns");
+ button.textContent=expanded?"Ver resumo compacto":"Ver todas as colunas";
+ button.setAttribute("aria-pressed",String(expanded));
+}
+function render(){
+ if(!DATA)return; let a=[...DATA.estados], s=document.getElementById("sort").value;
+ if(s==="uf")a.sort((x,y)=>x.uf.localeCompare(y.uf));
+ if(s==="peso")a.sort((x,y)=>y.pesoBrasil-x.pesoBrasil);
+ if(s==="apuracao")a.sort((x,y)=>y.secoesPct-x.secoesPct);
+ if(s==="lula")a.sort((x,y)=>y.lula.percentual-x.lula.percentual);
+ if(s==="flavio")a.sort((x,y)=>y.flavio.percentual-x.flavio.percentual);
+ rows.innerHTML=groupedRows(a,x=>`<tr class="${leaderClass(x)}"><td class="uf">${x.uf}</td><td><div class="mini"><b>${pf(x.secoesPct)}</b><span><i style="width:${Math.min(100,x.secoesPct)}%"></i></span></div></td><td class="red">${pf(x.lula.percentual)}<span class="cell-votes">${nf.format(x.lula.votos)} votos</span></td><td class="blue">${pf(x.flavio.percentual)}<span class="cell-votes">${nf.format(x.flavio.votos)} votos</span></td><td class="purple">${pf(otherPct(x))}<span class="cell-votes">${nf.format(otherVotes(x))} votos</span></td><td>${nf.format(x.validos)}</td><td>${pf(x.pesoBrasil)}</td><td>${nf.format(x.secoesTotalizadas)}${x.secoesTotal?" / "+nf.format(x.secoesTotal):""}</td></tr>`);
+ errors.innerHTML=DATA.errors.length?`<div class="error"><b>Arquivos não carregados:</b> ${DATA.errors.join(" · ")}</div>`:"";
+}
+function showScreen(){
+ const screen=location.hash==="#sobre"?"sobre":location.hash==="#projecao"?"projecao":"apuracao";
+ for(const [name,tab] of [["apuracao","tabApuracao"],["projecao","tabProjecao"],["sobre","tabSobre"]]){
+  document.getElementById(name+"Screen").hidden=name!==screen;
+  const link=document.getElementById(tab);
+  link.classList.toggle("active",name===screen);
+  if(name===screen)link.setAttribute("aria-current","page");else link.removeAttribute("aria-current");
+ }
+}
+function renderProjection(){
+ const p=projectResults(DATA), el=id=>document.getElementById(id);
+ if(!p){el("projectionStatus").textContent="Projeção indisponível: aguardando a parcial nacional com votos válidos.";return;}
+ el("projectionStatus").textContent=p.incomplete?"Projeção parcial: há UFs ausentes ou sem base suficiente para extrapolar.":"Base disponível para Brasil e 27 UFs · atualiza automaticamente a cada minuto.";
+ for(const [name,votes,percent,current] of [["Lula",p.lula,p.lulaPct,p.currentLulaPct],["Flavio",p.flavio,p.flavioPct,p.currentFlavioPct],["Demais",p.demais,p.demaisPct,otherPct(DATA.brasil)]]){
+  el("proj"+name).textContent=pf(percent);
+  el("proj"+name+"Votes").textContent=nf.format(Math.round(votes))+" votos estimados";
+  const delta=percent-current;
+  el("proj"+name+"Delta").textContent="Atual: "+pf(current)+" · variação: "+(delta>=0?"+":"")+delta.toFixed(2).replace(".",",")+" p.p.";
+  el("proj"+name+"Bar").style.width=percent+"%";
+ }
+ el("projTotal").textContent=nf.format(Math.round(p.total));
+ el("projRemaining").textContent=nf.format(Math.round(p.remaining))+" votos restantes estimados nas UFs";
+ el("projOthers").textContent="Vermelho: Lula · Azul: Flávio · Roxo: demais candidatos ("+pf(Math.max(0,100-p.lulaPct-p.flavioPct))+")";
+ const gap=p.lula-p.flavio;
+ el("projMargin").textContent=gap===0?"Empate na projeção entre Lula e Flávio.":"Diferença projetada entre os dois: "+nf.format(Math.round(Math.abs(gap)))+" votos a favor de "+(gap>0?"Lula":"Flávio")+" ("+Math.abs(p.lulaPct-p.flavioPct).toFixed(2).replace(".",",")+" p.p.).";
+ el("projNational").textContent="Comparação usando apenas o avanço nacional: Lula "+pf(p.currentLulaPct)+", Flávio "+pf(p.currentFlavioPct)+(p.nationalTotal?" · "+nf.format(Math.round(p.nationalTotal))+" votos válidos estimados.":" · volume indisponível.");
+ el("projectionRows").innerHTML=groupedRows([...p.states].sort((a,b)=>b.restante-a.restante),s=>
+  '<tr class="'+leaderClass(s)+'"><td class="uf">'+s.uf+'</td><td>'+pf(s.secoesPct)+'</td><td>'+nf.format(s.validos)+'</td><td>'+(s.available?nf.format(Math.round(s.finalValidos)):"Sem base")+'</td><td>'+(s.available?nf.format(Math.round(s.restante)):"—")+'</td><td class="red">'+(s.available?nf.format(Math.round(s.finalLula))+" · "+pf(s.lula.votos/s.validos*100):"—")+'</td><td class="blue">'+(s.available?nf.format(Math.round(s.finalFlavio))+" · "+pf(s.flavio.votos/s.validos*100):"—")+'</td><td class="purple">'+(s.available?nf.format(Math.round(Math.max(0,s.finalValidos-s.finalLula-s.finalFlavio)))+" · "+pf(otherPct(s)):"—")+'</td></tr>');
+}
+window.addEventListener("hashchange",showScreen); showScreen();
+load(); setInterval(load,60000); setInterval(()=>{if(DATA)updateFileTime();},15000);
+</script></body></html>
