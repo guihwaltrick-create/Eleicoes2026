@@ -132,6 +132,13 @@ const server = http.createServer(async (req,res) => {
     if(err) return send(res,404,"text/plain","Not found");
     const ext=path.extname(full);
     const type=ext===".html"?"text/html; charset=utf-8":ext===".js"?"text/javascript":ext===".png"?"image/png":[".jpg",".jpeg"].includes(ext)?"image/jpeg":"text/plain";
+    if (ext === ".html") {
+      // URLs absolutas permitem que os aplicativos encontrem a imagem de compartilhamento.
+      const protocol = req.headers["x-forwarded-proto"] === "https" || req.socket.encrypted ? "https" : "http";
+      const origin = new URL(process.env.SITE_URL || protocol + "://" + req.headers.host).origin;
+      const escapedOrigin = origin.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+      b = b.toString("utf8").replaceAll("__SITE_ORIGIN__", escapedOrigin);
+    }
     send(res,200,type,b);
   });
 });
