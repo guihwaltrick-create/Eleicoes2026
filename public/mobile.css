@@ -1,0 +1,87 @@
+@media(max-width:700px){
+ body{border-top-width:5px}
+ .wrap{padding:18px 12px 28px}
+ .top{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px;margin-bottom:14px}
+ h1{font-size:20px;line-height:1.25;letter-spacing:-.4px}
+ .top .sub{font-size:11px;line-height:1.5;margin-top:7px}
+ .top>.btn{min-height:44px;padding:10px 12px;font-size:12px}
+ .turn-selector{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:12px;margin-bottom:14px;border-radius:12px}
+ .turn-selector label{font-size:12px}
+ .turn-selector select{min-width:120px;min-height:44px;font-size:16px;padding:8px 12px}
+ .turn-selector span{grid-column:1 / -1;font-size:11px;line-height:1.4}
+ .tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));position:sticky;top:0;z-index:25;width:100%;gap:3px;padding:4px;margin-bottom:18px;border-radius:12px;background:#eaeaea;box-shadow:0 3px 12px #0000000a}
+ .tabs a{display:flex;align-items:center;justify-content:center;min-height:44px;min-width:0;padding:8px 4px;font-size:11px;line-height:1.3;text-align:center;border-radius:8px}
+ .card{padding:16px;border-radius:14px}
+ .grid,.projection-grid{gap:12px}
+ .section{margin-top:20px}
+ .toolbar{gap:10px;margin-bottom:12px}
+ .toolbar h2{font-size:19px;line-height:1.25}
+ .toolbar .sub{font-size:12px;line-height:1.45}
+ .btn,.mobile-columns,select{min-height:44px}
+ .state-controls{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px}
+ .state-controls select{min-width:0;max-width:none;width:100%;padding:8px;font-size:12px}
+ .mobile-columns{padding:8px 10px;font-size:11px}
+ .candidates{gap:10px;margin-top:16px}
+ .cand.photo-card{min-height:100px;padding:12px}
+ .cand.photo-card .candidate-photo{width:64px;height:64px;min-width:64px;min-height:64px;margin-left:10px}
+ .cand .kicker{font-size:10px;line-height:1.4}
+ .cand b{font-size:26px}
+ .projection-grid .card{min-width:0}
+ .creator-signature{gap:16px;margin-top:24px;padding:18px;border-radius:14px}
+ .creator-brand{gap:12px;min-width:0}
+ .creator-brand img{width:64px;height:42px}
+ .creator-brand strong{font-size:13px}
+ .creator-brand .sub{font-size:11px;line-height:1.5}
+ .creator-link{min-height:44px;display:flex;align-items:center;justify-content:center;width:100%;font-size:12px}
+ #mapaScreen .map-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ #mapaScreen .map-controls label{display:none}
+ #mapaScreen .map-controls select{grid-column:1 / -1;width:100%;min-width:0;min-height:44px;font-size:16px;padding:9px 12px}
+ #mapaScreen .map-controls .btn{min-height:44px;padding:10px;font-size:12px}
+ #mapaScreen .map-legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px;margin:12px 0;font-size:10px}
+ #mapaScreen .map-intensity-legend{gap:6px 9px;font-size:10px;margin:10px 0}
+ #mapaScreen .map-intensity-legend>span:first-child{flex-basis:100%}
+ #mapaScreen .map-status{font-size:11px;line-height:1.5;margin:10px 0}
+ #mapaScreen .map-layout{margin-top:12px}
+ #mapaScreen .map-canvas{padding:12px;gap:14px;border-radius:16px}
+ #mapaScreen .map-scoreboard{max-width:none}
+ #mapaScreen .map-detail-heading{justify-content:space-between;gap:10px;margin-bottom:10px;min-height:40px}
+ #mapaScreen .map-detail-heading h3{text-align:left;font-size:13px;line-height:1.4}
+ #mapaScreen .map-detail-actions button{min-height:40px;padding:8px;font-size:11px;flex-shrink:0}
+ #mapaScreen .map-cards{gap:8px}
+ #mapaScreen .map-candidate{display:grid;grid-template-columns:48px minmax(0,1fr);align-items:center;gap:3px 6px;padding:10px 8px;border-radius:10px;text-align:left}
+ #mapaScreen .map-candidate-photo{grid-row:1 / 3;width:48px;height:48px;margin:0;border-width:2px}
+ #mapaScreen .map-candidate-name{font-size:10px;line-height:1.3;white-space:normal;overflow-wrap:anywhere}
+ #mapaScreen .map-candidate-party{font-size:9px;margin:0;letter-spacing:1px}
+ #mapaScreen .map-candidate-percent{grid-column:1 / -1;font-size:25px;margin:6px 0 0;text-align:center}
+ #mapaScreen .map-candidate-votes{grid-column:1 / -1;font-size:10px;text-align:center}
+ #mapaScreen .map-candidate-progress{grid-column:1 / -1;margin-top:7px}
+ #mapaScreen .map-other-summary{font-size:10px;line-height:1.5;margin-top:9px}
+ #mapaScreen .map-file-detail{font-size:9px;line-height:1.5;margin-top:5px}
+ #mapaScreen .map-stage{border-radius:10px}
+ #mapaScreen .map-canvas svg{width:100%;height:auto;aspect-ratio:1;touch-action:pan-y}
+ #mapaScreen .map-canvas svg.is-zoomed{touch-action:none}
+ #mapaScreen .map-tools{left:4px;top:4px;gap:6px}
+ #mapaScreen .map-tools button{width:40px;height:40px;font-size:18px}
+ #mapaScreen .map-canvas-hint{font-size:9px;padding:0 8px;bottom:2px}
+ #mapaScreen .map-sidebar{height:auto;max-height:560px;max-height:65svh;min-height:0;padding:14px;border-radius:12px}
+ #mapaScreen .map-list-heading h3{font-size:14px}
+ #mapaScreen .map-list-summary{font-size:11px;line-height:1.5;margin-top:7px}
+ #mapaScreen .map-search-content{margin-top:12px;flex:0 1 auto}
+ #mapaScreen .map-sidebar input{font-size:16px;min-height:44px;margin-bottom:8px}
+ #mapaScreen .map-places{display:block;flex:0 1 auto;max-height:340px}
+ #mapaScreen .map-place{padding:12px 4px;gap:5px 8px;font-size:12px;min-height:72px}
+ #mapaScreen .map-place-results{font-size:11px;gap:5px 10px}
+ #mapaScreen .map-place small{font-size:10px}
+ #mapaScreen>.foot{font-size:10px;line-height:1.6;margin-top:12px;overflow-wrap:anywhere}
+ .map-tooltip{left:12px!important;right:12px;top:auto!important;bottom:12px;bottom:max(12px,env(safe-area-inset-bottom));width:auto;max-width:none;max-height:75svh;overflow:auto;padding:14px;border-radius:16px;box-shadow:0 -8px 40px #0007}
+ .map-tooltip .map-popup-heading{margin-bottom:10px}
+ .map-tooltip .map-popup-close{min-width:40px;min-height:40px;display:flex;justify-content:center;align-items:center;margin:-7px -6px 0 0}
+ .map-tooltip .map-popup-action{min-height:44px;font-size:12px}
+}
+@media(max-width:360px){
+ .tabs a{font-size:10px}
+ #mapaScreen .map-candidate{grid-template-columns:40px minmax(0,1fr);padding:9px 6px;column-gap:5px}
+ #mapaScreen .map-candidate-photo{width:40px;height:40px}
+ #mapaScreen .map-candidate-name{font-size:9px}
+ #mapaScreen .map-candidate-percent{font-size:23px}
+}

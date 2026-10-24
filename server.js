@@ -2,12 +2,26 @@ const http = require("http");
 const fs = require("fs");
 const path = require("path");
 const { URL } = require("url");
+const { createMapService, STATE_IDS } = require("./map-data");
 
+const { electionFor } = require("./elections");
+const { createResultCache } = require("./result-cache");
 const PORT = process.env.PORT || 3000;
-const TSE = "https://resultados.tse.jus.br/oficial/ele2026/6257/dados";
+const resultCache = createResultCache();
 const UFS = ["ac","al","ap","am","ba","ce","df","es","go","ma","mt","ms","mg","pa","pb","pr","pe","pi","rj","rn","rs","ro","rr","sc","sp","se","to"];
 const CACHE_MS = 30_000;
-let cache = { at: 0, data: null };
+
+let nextTSERequest = 0;
+async function fetchJSON(url, tse = false) {
+  if (tse) {
+    const start = Math.max(Date.now(), nextTSERequest);
+    nextTSERequest = start + 25;
+    await new Promise(resolve => setTimeout(resolve, start - Date.now()));
+  }
+  const response = await fetch(url, {headers:{accept:"application/json", "user-agent":"TSE-Dashboard/1.0"}, signal:AbortSignal.timeout(tse ? 12000 : 8000)});
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  return response.json();
+}
 
 const n = v => {
   if (v === null || v === undefined || v === "") return 0;
@@ -74,30 +88,28 @@ function normalize(raw, uf) {
   };
 }
 
-async function getJSON(uf) {
-  const file = `${uf}-c0001-e006257-u.json`;
-  const url = `${TSE}/${uf}/${file}?_=${Date.now()}`;
-  const r = await fetch(url, {
-    headers: { "accept":"application/json", "user-agent":"Mozilla/5.0 TSE-Dashboard/1.0" },
-    cache: "no-store"
-  });
-  if (!r.ok) throw new Error(`${uf.toUpperCase()}: TSE HTTP ${r.status}`);
-  return normalize(await r.json(), uf);
+async function getJSON(uf, election) {
+  const file = `${uf}-c0001-e${election.arquivo}-u.json`;
+  const url = `${election.root}/dados/${uf}/${file}`;
+  try { return normalize(await fetchJSON(url, true), uf); }
+  catch (e) { throw new Error(`${uf.toUpperCase()}: TSE ${e.message}`); }
 }
+const mapService = createMapService({fetchJSON, normalize});
 
-async function snapshot() {
-  if (cache.data && Date.now() - cache.at < CACHE_MS) return cache.data;
+async function snapshot(turn = "2") {
+  const election = electionFor(turn);
+  return resultCache("national:"+election.codigo,election.turno===1?Infinity:CACHE_MS,async()=>{
   const targets = ["br", ...UFS];
-  const settled = await Promise.allSettled(targets.map(getJSON));
+  const settled = await Promise.allSettled(targets.map(uf=>getJSON(uf,election)));
   const ok = settled.filter(x => x.status === "fulfilled").map(x => x.value);
   const errors = settled.filter(x => x.status === "rejected").map(x => x.reason.message);
   const brasil = ok.find(x => x.uf === "BR") || null;
   const estados = ok.filter(x => x.uf !== "BR");
   const totalValidos = brasil?.validos || estados.reduce((a,x)=>a+x.validos,0);
   estados.forEach(x => x.pesoBrasil = totalValidos ? x.validos / totalValidos * 100 : 0);
-  const data = { fonte:"TSE", coletadoEm:new Date().toISOString(), brasil, estados, errors };
-  cache = { at: Date.now(), data };
+  const data = { turno:election.turno, eleicao:election.codigo, fonte:"TSE", coletadoEm:new Date().toISOString(), brasil, estados, errors };
   return data;
+  }, {persist:election.turno===1,complete:data=>election.turno===2||Boolean(data.brasil&&data.estados.length===27&&data.errors.length===0)});
 }
 
 function send(res, code, type, body) {
@@ -111,17 +123,33 @@ function send(res, code, type, body) {
 
 const server = http.createServer(async (req,res) => {
   const u = new URL(req.url, `http://${req.headers.host}`);
+  let election;
+  if(u.pathname.startsWith("/api/")){
+    try {election=electionFor(u.searchParams.get("turno")??"2");}
+    catch(e){return send(res,400,"application/json",JSON.stringify({error:e.message}));}
+  }
+  if (["/api/municipios", "/api/mapa"].includes(u.pathname)) {
+    const uf = (u.searchParams.get("uf") || (u.pathname === "/api/mapa" ? "br" : "")).toLowerCase();
+    if (!Object.hasOwn(STATE_IDS,uf) && !(uf === "br" && u.pathname === "/api/mapa")) return send(res,400,"application/json",JSON.stringify({error:"UF inválida"}));
+    try {
+      const pageParam = u.searchParams.get("pagina");
+      const page = pageParam === null ? null : Number(pageParam);
+      if (page !== null && (!/^\d+$/.test(pageParam) || !Number.isSafeInteger(page) || page > 100)) return send(res,400,"application/json",JSON.stringify({error:"Página inválida"}));
+      const data = await (u.pathname === "/api/mapa" ? mapService.geometry(uf) : mapService.municipalities(uf, page, election.turno));
+      return send(res,200,"application/json; charset=utf-8",JSON.stringify(data));
+    } catch(e) { return send(res,502,"application/json",JSON.stringify({error:e.message})); }
+  }
   if (u.pathname === "/api/resultados") {
-    try { return send(res,200,"application/json; charset=utf-8",JSON.stringify(await snapshot())); }
+    try { return send(res,200,"application/json; charset=utf-8",JSON.stringify(await snapshot(election.turno))); }
     catch(e){ return send(res,500,"application/json; charset=utf-8",JSON.stringify({error:e.message})); }
   }
   if (u.pathname === "/api/raw") {
     const uf = (u.searchParams.get("uf") || "br").toLowerCase();
     if (![...UFS,"br"].includes(uf)) return send(res,400,"application/json","{\"error\":\"UF inválida\"}");
     try {
-      const file = `${uf}-c0001-e006257-u.json`;
-      const r = await fetch(`${TSE}/${uf}/${file}?_=${Date.now()}`, {cache:"no-store"});
-      return send(res,r.status,"application/json; charset=utf-8",await r.text());
+      const file = `${uf}-c0001-e${election.arquivo}-u.json`;
+      const raw = await resultCache(`raw:${election.codigo}:${uf}`,election.turno===1?Infinity:CACHE_MS,()=>fetchJSON(`${election.root}/dados/${uf}/${file}`,true),{persist:election.turno===1});
+      return send(res,200,"application/json; charset=utf-8",JSON.stringify(raw));
     } catch(e){ return send(res,500,"application/json",JSON.stringify({error:e.message})); }
   }
 
@@ -131,7 +159,7 @@ const server = http.createServer(async (req,res) => {
   fs.readFile(full,(err,b)=>{
     if(err) return send(res,404,"text/plain","Not found");
     const ext=path.extname(full);
-    const type=ext===".html"?"text/html; charset=utf-8":ext===".js"?"text/javascript":ext===".png"?"image/png":[".jpg",".jpeg"].includes(ext)?"image/jpeg":"text/plain";
+    const type=ext===".html"?"text/html; charset=utf-8":ext===".js"?"text/javascript":ext===".css"?"text/css; charset=utf-8":ext===".png"?"image/png":[".jpg",".jpeg"].includes(ext)?"image/jpeg":"text/plain";
     if (ext === ".html") {
       // URLs absolutas permitem que os aplicativos encontrem a imagem de compartilhamento.
       const protocol = req.headers["x-forwarded-proto"] === "https" || req.socket.encrypted ? "https" : "http";
@@ -142,4 +170,5 @@ const server = http.createServer(async (req,res) => {
     send(res,200,type,b);
   });
 });
-server.listen(PORT,()=>console.log(`Dashboard: http://localhost:${PORT}`));
+if (require.main === module) server.listen(PORT,()=>console.log(`Dashboard: http://localhost:${PORT}`));
+module.exports = {server, normalize};

@@ -23,6 +23,7 @@
 <meta name="twitter:description" content="Apuração e projeções com dados do TSE. Criado por Guilherme Waltrick.">
 <meta name="twitter:image" content="https://gwdigital-eleicoes2026.vercel.app/compartilhamento-eleicoes-2026.png">
 <meta name="twitter:image:alt" content="Logo GW Soluções Digitais">
+<link rel="stylesheet" href="/map.css">
 <style>
 :root{--bg:#f5f6f8;--card:#fff;--text:#202124;--muted:#6b7280;--line:#e5e7eb;--lula:#c62828;--flavio:#1f5fae;--accent:#647f2e}
 *{box-sizing:border-box} body{margin:0;background:var(--bg);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;color:var(--text)}
@@ -100,22 +101,25 @@ th{background:#fafafa}.group-total{color:var(--text)}
  .results-table:not(.mobile-expanded) th:nth-child(2),.results-table:not(.mobile-expanded) td:nth-child(2){width:29%;padding-left:6px;padding-right:6px;text-align:left}
  .results-table:not(.mobile-expanded) thead th:nth-child(3),.results-table:not(.mobile-expanded) tbody td:nth-child(3),.results-table:not(.mobile-expanded) thead th:nth-child(4),.results-table:not(.mobile-expanded) tbody td:nth-child(4){width:28%;text-align:center;padding-left:6px;padding-right:6px}
 }
+.candidate-photo.candidate-photo-lula{object-fit:cover;object-position:center bottom}
 </style>
+<link rel="stylesheet" href="/mobile.css">
 </head>
 <body><main class="wrap">
 <div class="top"><div><h1>Apuração Presidencial — 2026</h1><div class="sub" id="updated">Carregando dados oficiais do TSE…</div></div><button class="btn" onclick="load()">Atualizar</button></div>
-<nav class="tabs" aria-label="Telas"><a href="#apuracao" id="tabApuracao">Apuração atual</a><a href="#projecao" id="tabProjecao">Projeção</a><a href="#sobre" id="tabSobre">Sobre</a></nav>
+<div class="turn-selector"><label for="electionTurn">Turno da eleição</label><select id="electionTurn"><option value="1">1º turno</option><option value="2" selected>2º turno</option></select><span id="turnStatus">2º turno · atualização automática a cada minuto</span></div>
+<nav class="tabs" aria-label="Telas"><a href="#apuracao" id="tabApuracao">Apuração atual</a><a href="#projecao" id="tabProjecao">Projeção</a><a href="#mapa" id="tabMapa">Mapa</a><a href="#sobre" id="tabSobre">Sobre</a></nav>
 <div id="apuracaoScreen"><div class="grid">
   <section class="card">
     <div class="kicker">Brasil · votos válidos</div><div class="big" id="validos">—</div>
     <div class="kicker">Seções totalizadas <strong id="pst">—</strong></div><div class="progress"><i id="bar" style="width:0"></i></div>
     <div class="candidates">
-      <div class="cand lula photo-card"><img class="candidate-photo" src="/lula-tse.jpg" alt="Lula" width="64" height="64"><div class="kicker">Lula</div><b id="lulaPct">—</b><div id="lulaVotos" class="sub">— votos</div></div>
+      <div class="cand lula photo-card"><img class="candidate-photo candidate-photo-lula" src="/lula-sem-fundo.png" alt="Lula" width="64" height="64"><div class="kicker">Lula</div><b id="lulaPct">—</b><div id="lulaVotos" class="sub">— votos</div></div>
       <div class="cand flavio photo-card"><img class="candidate-photo" src="/flavio-tse.jpg" alt="Flávio Bolsonaro" width="64" height="64"><div class="kicker">Flávio Bolsonaro</div><b id="flavioPct">—</b><div id="flavioVotos" class="sub">— votos</div></div>
       <div class="cand others"><div class="kicker">Demais candidatos</div><b id="othersPct">—</b><div id="othersVotos" class="sub">— votos</div></div>
     </div>
   </section>
-  <section class="card"><div class="kicker">Leitura da parcial</div><div class="big" id="ufsOk">—</div><div class="sub">UFs carregadas</div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="kicker">Fonte</div><div style="font-weight:700;margin-top:5px">Tribunal Superior Eleitoral</div><div class="sub">Arquivos JSON EA20 · eleição 6257</div></section>
+  <section class="card"><div class="kicker">Leitura da parcial</div><div class="big" id="ufsOk">—</div><div class="sub">UFs carregadas</div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="kicker">Fonte</div><div style="font-weight:700;margin-top:5px">Tribunal Superior Eleitoral</div><div class="sub"><span id="electionSource">Arquivos JSON EA20 · eleição 6258 · 2º turno</span></div></section>
 </div>
 
 <section class="section">
@@ -130,7 +134,7 @@ th{background:#fafafa}.group-total{color:var(--text)}
  <div class="toolbar"><div><h2>Projeção com a parcial atual</h2><div class="sub">Estimativa para 100% das seções, mantendo o comportamento de cada UF.</div></div></div>
  <div id="projectionStatus" class="sub" role="status">Aguardando dados…</div>
  <div class="projection-grid section">
-  <section class="card photo-card"><img class="candidate-photo" src="/lula-tse.jpg" alt="Lula" width="64" height="64"><div class="kicker">Lula · projeção por UF</div><div class="big red" id="projLula">—</div><div class="sub" id="projLulaVotes">—</div><div class="delta" id="projLulaDelta">—</div></section>
+  <section class="card photo-card"><img class="candidate-photo candidate-photo-lula" src="/lula-sem-fundo.png" alt="Lula" width="64" height="64"><div class="kicker">Lula · projeção por UF</div><div class="big red" id="projLula">—</div><div class="sub" id="projLulaVotes">—</div><div class="delta" id="projLulaDelta">—</div></section>
   <section class="card photo-card"><img class="candidate-photo" src="/flavio-tse.jpg" alt="Flávio Bolsonaro" width="64" height="64"><div class="kicker">Flávio · projeção por UF</div><div class="big blue" id="projFlavio">—</div><div class="sub" id="projFlavioVotes">—</div><div class="delta" id="projFlavioDelta">—</div></section>
   <section class="card"><div class="kicker">Demais candidatos · projeção por UF</div><div class="big purple" id="projDemais">—</div><div class="sub" id="projDemaisVotes">—</div><div class="delta" id="projDemaisDelta">—</div></section>
   <section class="card"><div class="kicker">Votos válidos estimados</div><div class="big" id="projTotal">—</div><div class="sub" id="projRemaining">—</div></section>
@@ -140,17 +144,35 @@ th{background:#fafafa}.group-total{color:var(--text)}
  <div class="toolbar"><div><h2>Projeção por estado</h2><div class="sub">Ordenado pelo volume estimado de votos ainda por apurar.</div></div></div>
  <div class="tablebox"><table><thead><tr><th>UF</th><th>Apurado</th><th>Válidos atuais</th><th>Válidos projetados</th><th>Restantes estimados</th><th>Lula · votos projetados</th><th>Flávio · votos projetados</th><th>Demais candidatos · projeção</th></tr></thead><tbody id="projectionRows"></tbody></table></div>
 </section>
+<section id="mapaScreen" hidden>
+ <div class="toolbar"><div><h2>Mapa da apuração</h2><div class="sub">Liderança entre Lula e Flávio por estado e município · votos já apurados</div></div></div>
+ <div class="map-controls"><label for="mapState">Local</label><select id="mapState"><option value="br">Brasil · estados</option></select><button class="btn" id="mapBack" type="button">Ver Brasil</button><button class="btn" id="mapRefresh" type="button">Atualizar mapa</button></div>
+ <div class="map-legend"><span><i style="background:#1f5fae"></i>Flávio à frente</span><span><i style="background:#c62828"></i>Lula à frente</span><span><i style="background:#b8c2cd"></i>Empate / sem votos</span><span><i style="background:#e4e9ef"></i>Dados indisponíveis</span></div>
+ <div class="map-intensity-legend"><span>Cor mais forte = maior percentual do líder</span><span class="map-intensity-scale blue-scale"></span><span class="map-intensity-scale red-scale"></span><span>0% → 100% dos votos válidos</span></div>
+ <p id="mapStatus" class="sub map-status" role="status">Selecione a aba para carregar o mapa.</p>
+ <div class="map-layout"><div class="map-canvas map-workspace">
+  <div class="map-scoreboard"><div class="map-detail-heading"><h3 id="mapLocation">Brasil</h3><div class="map-detail-actions"><button id="mapClearCity" type="button" title="Voltar ao resumo do estado">Resumo</button><button id="mapDetailRefresh" type="button" title="Atualizar os resultados deste local">Atualizar</button><button id="mapDetailBack" type="button" title="Voltar ao mapa do Brasil" hidden>Voltar</button></div></div><div id="mapCards" class="map-cards"></div><div id="mapOthers" class="map-other-summary"></div><p id="mapDetail" class="map-file-detail"></p></div>
+  <div class="map-stage"><svg id="electionMap" viewBox="0 0 900 900" role="group" aria-label="Mapa eleitoral interativo. Passe o mouse ou toque em um local para ver os resultados."></svg>
+  <div class="map-tools"><button id="mapZoomIn" type="button" aria-label="Ampliar mapa">+</button><button id="mapZoomOut" type="button" aria-label="Reduzir mapa">−</button><button id="mapZoomReset" type="button" aria-label="Restaurar enquadramento">↺</button></div>
+  <div class="map-canvas-hint">Passe o mouse ou toque para ver a apuração</div></div>
+ <aside class="map-sidebar"><div class="map-list-heading"><h3 id="mapListTitle">Resumo dos estados</h3><span id="mapListCount"></span></div><p id="mapListSummary" class="map-list-summary"></p><div class="map-search-content"><label for="mapSearch">Buscar estado ou cidade</label><input id="mapSearch" type="search" placeholder="Digite o nome do local…"><div id="mapPlaces" class="map-places"></div></div></aside></div></div>
+ <aside id="mapTooltip" class="map-tooltip" role="dialog" aria-label="Resultados do local" hidden></aside>
+ <p class="foot">Selecione um estado para abrir os municípios. Use + e arraste para explorar o mapa ampliado. As cores comparam os votos de Lula e Flávio; os cartões mostram a classificação por votos, incluindo os demais candidatos. Resultados municipais são consultados separadamente e podem ter horários diferentes do total estadual.</p>
+ <p id="mapSource" class="foot"></p><p class="foot">Geografia: <a href="https://servicodados.ibge.gov.br/api/docs/malhas?versao=3" target="_blank" rel="noopener noreferrer">IBGE</a> · acervos alternativos: <a href="https://github.com/tbrugz/geodata-br" target="_blank" rel="noopener noreferrer">Geodata BR (CC0)</a> e <a href="https://github.com/codeforamerica/click_that_hood/blob/master/public/data/brazil-states.geojson" target="_blank" rel="noopener noreferrer">Click That Hood / CodeGeo</a>. Municípios sem limites disponíveis podem ser consultados na lista.</p>
+</section>
 <section id="sobreScreen" hidden>
  <div class="card about-layout">
   <div class="about-logo"><img src="/Icone_azul_branco.png" alt="GW Soluções Digitais" width="1673" height="941"></div>
-  <div class="about-copy"><div class="kicker">Sobre o criador · GW Soluções Digitais</div><h2>Guilherme Waltrick</h2><p>Criador deste painel de apuração e projeção presidencial. O projeto reúne os dados públicos do TSE em uma interface para acompanhar os resultados do Brasil e de cada estado.</p><p>Quer conhecer meu trabalho ou conversar sobre um projeto? Entre em contato.</p><div class="contact-actions"><a class="btn" href="https://wa.me/5549999070882" target="_blank" rel="noopener noreferrer">Conversar no WhatsApp</a><a class="contact-secondary" href="tel:+5549999070882">(49) 99907-0882</a></div><p class="sub">Fotos dos candidatos: <a href="https://resultados.tse.jus.br/oficial/app/index.html" target="_blank" rel="noopener noreferrer">Tribunal Superior Eleitoral · eleição 6257</a>.</p><p class="about-note">Este é um projeto independente. Os dados de apuração são fornecidos pelo TSE; as projeções são estimativas matemáticas descritas na tela de projeção.</p></div>
+  <div class="about-copy"><div class="kicker">Sobre o criador · GW Soluções Digitais</div><h2>Guilherme Waltrick</h2><p>Criador deste painel de apuração e projeção presidencial. O projeto reúne os dados públicos do TSE em uma interface para acompanhar os resultados do Brasil e de cada estado.</p><p>Quer conhecer meu trabalho ou conversar sobre um projeto? Entre em contato.</p><div class="contact-actions"><a class="btn" href="https://wa.me/5549999070882" target="_blank" rel="noopener noreferrer">Conversar no WhatsApp</a><a class="contact-secondary" href="tel:+5549999070882">(49) 99907-0882</a></div><p class="sub">Fotos dos candidatos: <a href="https://resultados.tse.jus.br/oficial/app/index.html" target="_blank" rel="noopener noreferrer">Tribunal Superior Eleitoral</a>.</p><p class="about-note">Este é um projeto independente. Os dados de apuração são fornecidos pelo TSE; as projeções são estimativas matemáticas descritas na tela de projeção.</p></div>
  </div>
 </section>
 <footer class="creator-signature"><a class="creator-brand" href="#sobre"><img src="/Icone_azul_branco.png" alt="GW Soluções Digitais" width="1673" height="941"><span><strong>Desenvolvido por Guilherme Waltrick</strong><span class="sub" style="display:block">GW Soluções Digitais · (49) 99907-0882</span></span></a><a class="creator-link" href="#sobre">Conheça o criador →</a></footer>
 </main>
 <script src="/projection.js"></script>
+<script src="/results-store.js"></script>
+<script src="/map.js"></script>
 <script>
-let DATA=null;
+let DATA=null, TURN="2";
 const nf=new Intl.NumberFormat("pt-BR"), pf=x=>`${Number(x||0).toFixed(2).replace(".",",")}%`;
 const otherVotes=s=>Math.max(0,s.validos-s.lula.votos-s.flavio.votos);
 const otherPct=s=>s.validos>0?otherVotes(s)/s.validos*100:0;
@@ -161,17 +183,27 @@ function fileAge(timestamp,now=Date.now()){
  const generated=Date.parse(year+"-"+month+"-"+day+"T"+hour+":"+minute+":"+second+"-03:00");
  if(!Number.isFinite(generated))return "";
  const minutes=Math.max(0,Math.floor((now-generated)/60000));
- return minutes===0?" (há menos de 1 minuto)":" (há "+minutes+" "+(minutes===1?"minuto":"minutos")+")";
+ if(minutes===0)return " (há menos de 1 minuto)";
+ const days=Math.floor(minutes/1440);
+ const hours=Math.floor(minutes%1440/60);
+ const remainingMinutes=minutes%60;
+ const parts=[];
+ if(days)parts.push(days+" "+(days===1?"dia":"dias"));
+ if(hours)parts.push(hours+" "+(hours===1?"hora":"horas"));
+ if(remainingMinutes)parts.push(remainingMinutes+" "+(remainingMinutes===1?"minuto":"minutos"));
+ return " (há "+parts.join(parts.length===3?", ":" e ").replace(/, ([^,]*)$/, " e $1")+")";
 }
 function updateFileTime(){
  const timestamp=DATA?.brasil?.atualizadoEm;
- document.getElementById("updated").textContent=timestamp?"Arquivo nacional do TSE · "+timestamp+fileAge(timestamp):"Data e hora do arquivo nacional indisponíveis";
+ document.getElementById("updated").textContent=TURN+"º turno · "+(timestamp?"Arquivo nacional do TSE · "+timestamp+fileAge(timestamp):"Data e hora do arquivo nacional indisponíveis");
 }
-async function load(){
- document.getElementById("updated").textContent="Atualizando…";
+async function load({background=false}={}){
+ const turn=background?"2":TURN;
+ if(turn===TURN)document.getElementById("updated").textContent="Carregando "+turn+"º turno…";
  try{
-  const r=await fetch("/api/resultados?_"+Date.now()); DATA=await r.json();
-  if(!r.ok) throw new Error(DATA.error||"Erro");
+  const data=await electionResults.get("/api/resultados",turn);
+  if(turn!==TURN)return;
+  DATA=data;
   const b=DATA.brasil;
   updateFileTime();
   if(b){
@@ -183,8 +215,8 @@ async function load(){
    document.getElementById("othersPct").textContent=pf(otherPct(b)); document.getElementById("othersVotos").textContent=nf.format(otherVotes(b))+" votos";
    flavioPct.textContent=pf(b.flavio.percentual); flavioVotos.textContent=nf.format(b.flavio.votos)+" votos";
   }
-  ufsOk.textContent=DATA.estados.length+"/27"; render(); renderProjection();
- }catch(e){document.getElementById("updated").textContent="Falha: "+e.message}
+  ufsOk.textContent=DATA.estados.length+"/27"; render(); renderProjection(); electoralMap.update(DATA);
+ }catch(e){if(turn===TURN)document.getElementById("updated").textContent="Falha no "+turn+"º turno: "+e.message}
 }
 function leaderClass(state){
  return state.lula.votos>state.flavio.votos?"leader-lula":state.flavio.votos>state.lula.votos?"leader-flavio":"";
@@ -222,18 +254,19 @@ function render(){
  errors.innerHTML=DATA.errors.length?`<div class="error"><b>Arquivos não carregados:</b> ${DATA.errors.join(" · ")}</div>`:"";
 }
 function showScreen(){
- const screen=location.hash==="#sobre"?"sobre":location.hash==="#projecao"?"projecao":"apuracao";
- for(const [name,tab] of [["apuracao","tabApuracao"],["projecao","tabProjecao"],["sobre","tabSobre"]]){
+ const screen=location.hash==="#mapa"?"mapa":location.hash==="#sobre"?"sobre":location.hash==="#projecao"?"projecao":"apuracao";
+ for(const [name,tab] of [["apuracao","tabApuracao"],["projecao","tabProjecao"],["sobre","tabSobre"],["mapa","tabMapa"]]){
   document.getElementById(name+"Screen").hidden=name!==screen;
   const link=document.getElementById(tab);
   link.classList.toggle("active",name===screen);
   if(name===screen)link.setAttribute("aria-current","page");else link.removeAttribute("aria-current");
  }
+ if(screen==="mapa")electoralMap.open();
 }
 function renderProjection(){
  const p=projectResults(DATA), el=id=>document.getElementById(id);
  if(!p){el("projectionStatus").textContent="Projeção indisponível: aguardando a parcial nacional com votos válidos.";return;}
- el("projectionStatus").textContent=p.incomplete?"Projeção parcial: há UFs ausentes ou sem base suficiente para extrapolar.":"Base disponível para Brasil e 27 UFs · atualiza automaticamente a cada minuto.";
+ el("projectionStatus").textContent=p.incomplete?"Projeção parcial: há UFs ausentes ou sem base suficiente para extrapolar.":"Base disponível para Brasil e 27 UFs · "+(TURN==="1"?"primeiro turno em cache.":"atualiza automaticamente a cada minuto.");
  for(const [name,votes,percent,current] of [["Lula",p.lula,p.lulaPct,p.currentLulaPct],["Flavio",p.flavio,p.flavioPct,p.currentFlavioPct],["Demais",p.demais,p.demaisPct,otherPct(DATA.brasil)]]){
   el("proj"+name).textContent=pf(percent);
   el("proj"+name+"Votes").textContent=nf.format(Math.round(votes))+" votos estimados";
@@ -250,6 +283,17 @@ function renderProjection(){
  el("projectionRows").innerHTML=groupedRows([...p.states].sort((a,b)=>b.restante-a.restante),s=>
   '<tr class="'+leaderClass(s)+'"><td class="uf">'+s.uf+'</td><td>'+pf(s.secoesPct)+'</td><td>'+nf.format(s.validos)+'</td><td>'+(s.available?nf.format(Math.round(s.finalValidos)):"Sem base")+'</td><td>'+(s.available?nf.format(Math.round(s.restante)):"—")+'</td><td class="red">'+(s.available?nf.format(Math.round(s.finalLula))+" · "+pf(s.lula.votos/s.validos*100):"—")+'</td><td class="blue">'+(s.available?nf.format(Math.round(s.finalFlavio))+" · "+pf(s.flavio.votos/s.validos*100):"—")+'</td><td class="purple">'+(s.available?nf.format(Math.round(Math.max(0,s.finalValidos-s.finalLula-s.finalFlavio)))+" · "+pf(otherPct(s)):"—")+'</td></tr>');
 }
+document.getElementById("electionTurn").addEventListener("change",event=>{
+ TURN=event.target.value;DATA=null;
+ document.getElementById("turnStatus").textContent=TURN==="1"?"1º turno · resultado em cache após a primeira consulta":"2º turno · atualização automática a cada minuto";
+ document.getElementById("electionSource").textContent="Arquivos JSON EA20 · eleição "+(TURN==="1"?"6257":"6258")+" · "+TURN+"º turno";
+ for(const id of ["validos","pst","lulaPct","lulaVotos","flavioPct","flavioVotos","othersPct","othersVotos","ufsOk","projLula","projLulaVotes","projLulaDelta","projFlavio","projFlavioVotes","projFlavioDelta","projDemais","projDemaisVotes","projDemaisDelta","projTotal","projRemaining","projOthers","projMargin","projNational"])document.getElementById(id).textContent="—";
+ document.getElementById("bar").style.width="0%";
+ for(const name of ["Lula","Flavio","Demais"])document.getElementById("proj"+name+"Bar").style.width="0%";
+ for(const id of ["rows","projectionRows","errors"])document.getElementById(id).replaceChildren();
+ document.getElementById("projectionStatus").textContent="Aguardando dados do "+TURN+"º turno…";
+ electoralMap.setTurn(TURN);load();
+});
 window.addEventListener("hashchange",showScreen); showScreen();
-load(); setInterval(load,60000); setInterval(()=>{if(DATA)updateFileTime();},15000);
+load(); setInterval(()=>load({background:true}),60000); setInterval(()=>{if(DATA)updateFileTime();},15000);
 </script></body></html>
