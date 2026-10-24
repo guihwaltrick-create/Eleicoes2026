@@ -103,9 +103,10 @@ th{background:#fafafa}.group-total{color:var(--text)}
 }
 .candidate-photo.candidate-photo-lula{object-fit:cover;object-position:center bottom}
 </style>
+<link rel="stylesheet" href="/turns.css">
 <link rel="stylesheet" href="/mobile.css">
 </head>
-<body><main class="wrap">
+<body data-turn="2"><main class="wrap">
 <div class="top"><div><h1>Apuração Presidencial — 2026</h1><div class="sub" id="updated">Carregando dados oficiais do TSE…</div></div><button class="btn" onclick="load()">Atualizar</button></div>
 <div class="turn-selector"><label for="electionTurn">Turno da eleição</label><select id="electionTurn"><option value="1">1º turno</option><option value="2" selected>2º turno</option></select><span id="turnStatus">2º turno · atualização automática a cada minuto</span></div>
 <nav class="tabs" aria-label="Telas"><a href="#apuracao" id="tabApuracao">Apuração atual</a><a href="#projecao" id="tabProjecao">Projeção</a><a href="#mapa" id="tabMapa">Mapa</a><a href="#sobre" id="tabSobre">Sobre</a></nav>
@@ -116,7 +117,7 @@ th{background:#fafafa}.group-total{color:var(--text)}
     <div class="candidates">
       <div class="cand lula photo-card"><img class="candidate-photo candidate-photo-lula" src="/lula-sem-fundo.png" alt="Lula" width="64" height="64"><div class="kicker">Lula</div><b id="lulaPct">—</b><div id="lulaVotos" class="sub">— votos</div></div>
       <div class="cand flavio photo-card"><img class="candidate-photo" src="/flavio-tse.jpg" alt="Flávio Bolsonaro" width="64" height="64"><div class="kicker">Flávio Bolsonaro</div><b id="flavioPct">—</b><div id="flavioVotos" class="sub">— votos</div></div>
-      <div class="cand others"><div class="kicker">Demais candidatos</div><b id="othersPct">—</b><div id="othersVotos" class="sub">— votos</div></div>
+      <div class="cand others first-round-only"><div class="kicker">Demais candidatos</div><b id="othersPct">—</b><div id="othersVotos" class="sub">— votos</div></div>
     </div>
   </section>
   <section class="card"><div class="kicker">Leitura da parcial</div><div class="big" id="ufsOk">—</div><div class="sub">UFs carregadas</div><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><div class="kicker">Fonte</div><div style="font-weight:700;margin-top:5px">Tribunal Superior Eleitoral</div><div class="sub"><span id="electionSource">Arquivos JSON EA20 · eleição 6258 · 2º turno</span></div></section>
@@ -125,7 +126,7 @@ th{background:#fafafa}.group-total{color:var(--text)}
 <section class="section">
  <div class="toolbar"><div><h2>Apuração por estado</h2><div class="sub">Participação no total nacional já apurado + andamento da totalização</div></div>
  <div class="state-controls"><select id="sort" onchange="render()"><option value="uf">Ordenar: UF</option><option value="peso">Maior peso no Brasil</option><option value="apuracao">Maior % fechado</option><option value="lula">Maior Lula %</option><option value="flavio">Maior Flávio %</option></select><button type="button" class="mobile-columns" id="mobileColumns" aria-pressed="false" onclick="toggleMobileColumns()">Ver todas as colunas</button></div></div>
- <div class="tablebox"><table class="results-table"><colgroup><col style="width:64px"><col style="width:150px"><col span="6"></colgroup><thead><tr><th>Estado</th><th>% fechado</th><th>Lula</th><th>Flávio</th><th>Demais candidatos</th><th>Votos válidos</th><th>% total BR</th><th>Seções totalizadas</th></tr></thead><tbody id="rows"></tbody></table></div>
+ <div class="tablebox"><table class="results-table"><colgroup><col style="width:64px"><col style="width:150px"><col id="resultDataColumns" span="5"></colgroup><thead><tr><th>Estado</th><th>% fechado</th><th>Lula</th><th>Flávio</th><th class="first-round-only">Demais candidatos</th><th>Votos válidos</th><th>% total BR</th><th>Seções totalizadas</th></tr></thead><tbody id="rows"></tbody></table></div>
  <div id="errors"></div>
  <div class="foot">Os números são parciais e podem mudar a cada atualização. Este painel apenas apresenta os arquivos públicos do TSE e não possui vínculo com a Justiça Eleitoral.</div>
 </section>
@@ -136,13 +137,13 @@ th{background:#fafafa}.group-total{color:var(--text)}
  <div class="projection-grid section">
   <section class="card photo-card"><img class="candidate-photo candidate-photo-lula" src="/lula-sem-fundo.png" alt="Lula" width="64" height="64"><div class="kicker">Lula · projeção por UF</div><div class="big red" id="projLula">—</div><div class="sub" id="projLulaVotes">—</div><div class="delta" id="projLulaDelta">—</div></section>
   <section class="card photo-card"><img class="candidate-photo" src="/flavio-tse.jpg" alt="Flávio Bolsonaro" width="64" height="64"><div class="kicker">Flávio · projeção por UF</div><div class="big blue" id="projFlavio">—</div><div class="sub" id="projFlavioVotes">—</div><div class="delta" id="projFlavioDelta">—</div></section>
-  <section class="card"><div class="kicker">Demais candidatos · projeção por UF</div><div class="big purple" id="projDemais">—</div><div class="sub" id="projDemaisVotes">—</div><div class="delta" id="projDemaisDelta">—</div></section>
+  <section class="card first-round-only"><div class="kicker">Demais candidatos · projeção por UF</div><div class="big purple" id="projDemais">—</div><div class="sub" id="projDemaisVotes">—</div><div class="delta" id="projDemaisDelta">—</div></section>
   <section class="card"><div class="kicker">Votos válidos estimados</div><div class="big" id="projTotal">—</div><div class="sub" id="projRemaining">—</div></section>
  </div>
- <section class="card section"><div class="kicker">Distribuição projetada · todos os votos válidos</div><div class="comparison" aria-label="Distribuição projetada"><span class="lula" id="projLulaBar"></span><span class="flavio" id="projFlavioBar"></span><span class="others" id="projDemaisBar"></span></div><div class="sub" id="projOthers">—</div><p id="projMargin"></p><div class="sub" id="projNational">—</div></section>
- <div class="card method"><strong>Como a projeção é calculada</strong><br>Em cada UF, dividimos os votos já apurados pela fração exata de seções totalizadas. Os votos restantes estimados mantêm a distribuição atual dos candidatos naquela UF e são acrescentados à parcial oficial do Brasil. Os percentuais incluem os demais candidatos. A comparação nacional mantém a distribuição atual do Brasil e usa apenas o avanço nacional.<br><span class="sub">É uma extrapolação matemática, sem margem de confiança ou previsão de vencedor. Seções ainda não apuradas podem ter tamanho e preferências diferentes. Diferenças de horário entre arquivos e votos do exterior permanecem na base nacional, sem extrapolação própria. UFs sem dados suficientes são sinalizadas e não são extrapoladas.</span></div>
+ <section class="card section"><div class="kicker">Distribuição projetada · todos os votos válidos</div><div class="comparison" aria-label="Distribuição projetada"><span class="lula" id="projLulaBar"></span><span class="flavio" id="projFlavioBar"></span><span class="others first-round-only" id="projDemaisBar"></span></div><div class="sub" id="projOthers">—</div><p id="projMargin"></p><div class="sub" id="projNational">—</div></section>
+ <div class="card method"><strong>Como a projeção é calculada</strong><br>Em cada UF, dividimos os votos já apurados pela fração exata de seções totalizadas. Os votos restantes estimados mantêm a distribuição atual dos candidatos naquela UF e são acrescentados à parcial oficial do Brasil. <span class="first-round-only">Os percentuais incluem os demais candidatos.</span> A comparação nacional mantém a distribuição atual do Brasil e usa apenas o avanço nacional.<br><span class="sub">É uma extrapolação matemática, sem margem de confiança ou previsão de vencedor. Seções ainda não apuradas podem ter tamanho e preferências diferentes. Diferenças de horário entre arquivos e votos do exterior permanecem na base nacional, sem extrapolação própria. UFs sem dados suficientes são sinalizadas e não são extrapoladas.</span></div>
  <div class="toolbar"><div><h2>Projeção por estado</h2><div class="sub">Ordenado pelo volume estimado de votos ainda por apurar.</div></div></div>
- <div class="tablebox"><table><thead><tr><th>UF</th><th>Apurado</th><th>Válidos atuais</th><th>Válidos projetados</th><th>Restantes estimados</th><th>Lula · votos projetados</th><th>Flávio · votos projetados</th><th>Demais candidatos · projeção</th></tr></thead><tbody id="projectionRows"></tbody></table></div>
+ <div class="tablebox"><table><thead><tr><th>UF</th><th>Apurado</th><th>Válidos atuais</th><th>Válidos projetados</th><th>Restantes estimados</th><th>Lula · votos projetados</th><th>Flávio · votos projetados</th><th class="first-round-only">Demais candidatos · projeção</th></tr></thead><tbody id="projectionRows"></tbody></table></div>
 </section>
 <section id="mapaScreen" hidden>
  <div class="toolbar"><div><h2>Mapa da apuração</h2><div class="sub">Liderança entre Lula e Flávio por estado e município · votos já apurados</div></div></div>
@@ -151,13 +152,13 @@ th{background:#fafafa}.group-total{color:var(--text)}
  <div class="map-intensity-legend"><span>Cor mais forte = maior percentual do líder</span><span class="map-intensity-scale blue-scale"></span><span class="map-intensity-scale red-scale"></span><span>0% → 100% dos votos válidos</span></div>
  <p id="mapStatus" class="sub map-status" role="status">Selecione a aba para carregar o mapa.</p>
  <div class="map-layout"><div class="map-canvas map-workspace">
-  <div class="map-scoreboard"><div class="map-detail-heading"><h3 id="mapLocation">Brasil</h3><div class="map-detail-actions"><button id="mapClearCity" type="button" title="Voltar ao resumo do estado">Resumo</button><button id="mapDetailRefresh" type="button" title="Atualizar os resultados deste local">Atualizar</button><button id="mapDetailBack" type="button" title="Voltar ao mapa do Brasil" hidden>Voltar</button></div></div><div id="mapCards" class="map-cards"></div><div id="mapOthers" class="map-other-summary"></div><p id="mapDetail" class="map-file-detail"></p></div>
+  <div class="map-scoreboard"><div class="map-detail-heading"><h3 id="mapLocation">Brasil</h3><div class="map-detail-actions"><button id="mapClearCity" type="button" title="Voltar ao resumo do estado">Resumo</button><button id="mapDetailRefresh" type="button" title="Atualizar os resultados deste local">Atualizar</button><button id="mapDetailBack" type="button" title="Voltar ao mapa do Brasil" hidden>Voltar</button></div></div><div id="mapCards" class="map-cards"></div><div id="mapOthers" class="map-other-summary first-round-only"></div><p id="mapDetail" class="map-file-detail"></p></div>
   <div class="map-stage"><svg id="electionMap" viewBox="0 0 900 900" role="group" aria-label="Mapa eleitoral interativo. Passe o mouse ou toque em um local para ver os resultados."></svg>
   <div class="map-tools"><button id="mapZoomIn" type="button" aria-label="Ampliar mapa">+</button><button id="mapZoomOut" type="button" aria-label="Reduzir mapa">−</button><button id="mapZoomReset" type="button" aria-label="Restaurar enquadramento">↺</button></div>
   <div class="map-canvas-hint">Passe o mouse ou toque para ver a apuração</div></div>
  <aside class="map-sidebar"><div class="map-list-heading"><h3 id="mapListTitle">Resumo dos estados</h3><span id="mapListCount"></span></div><p id="mapListSummary" class="map-list-summary"></p><div class="map-search-content"><label for="mapSearch">Buscar estado ou cidade</label><input id="mapSearch" type="search" placeholder="Digite o nome do local…"><div id="mapPlaces" class="map-places"></div></div></aside></div></div>
  <aside id="mapTooltip" class="map-tooltip" role="dialog" aria-label="Resultados do local" hidden></aside>
- <p class="foot">Selecione um estado para abrir os municípios. Use + e arraste para explorar o mapa ampliado. As cores comparam os votos de Lula e Flávio; os cartões mostram a classificação por votos, incluindo os demais candidatos. Resultados municipais são consultados separadamente e podem ter horários diferentes do total estadual.</p>
+ <p class="foot">Selecione um estado para abrir os municípios. Use + e arraste para explorar o mapa ampliado. As cores comparam os votos de Lula e Flávio; os cartões mostram a classificação por votos<span class="first-round-only">, incluindo os demais candidatos</span>. Resultados municipais são consultados separadamente e podem ter horários diferentes do total estadual.</p>
  <p id="mapSource" class="foot"></p><p class="foot">Geografia: <a href="https://servicodados.ibge.gov.br/api/docs/malhas?versao=3" target="_blank" rel="noopener noreferrer">IBGE</a> · acervos alternativos: <a href="https://github.com/tbrugz/geodata-br" target="_blank" rel="noopener noreferrer">Geodata BR (CC0)</a> e <a href="https://github.com/codeforamerica/click_that_hood/blob/master/public/data/brazil-states.geojson" target="_blank" rel="noopener noreferrer">Click That Hood / CodeGeo</a>. Municípios sem limites disponíveis podem ser consultados na lista.</p>
 </section>
 <section id="sobreScreen" hidden>
@@ -231,9 +232,9 @@ function groupedRows(states,renderRow){
   const flavio=group.reduce((sum,state)=>sum+state.flavio.votos,0);
   const demais=group.reduce((sum,state)=>sum+otherVotes(state),0);
   const percent=votes=>total>0?pf(votes/total*100):"—";
-  const candidates=[{label:"Lula",votes:lula,color:"red"},{label:"Flávio Bolsonaro",votes:flavio,color:"blue"},{label:"Demais candidatos",votes:demais,color:"purple"}].sort((a,b)=>b.votes-a.votes);
+  const candidates=[{label:"Lula",votes:lula,color:"red"},{label:"Flávio Bolsonaro",votes:flavio,color:"blue"},...(TURN==="1"?[{label:"Demais candidatos",votes:demais,color:"purple"}]:[])].sort((a,b)=>b.votes-a.votes);
   const summary=candidates.map(candidate=>'<span class="'+candidate.color+'">'+candidate.label+': '+percent(candidate.votes)+'</span>').join("");
-  return '<tr class="state-group '+key+'"><th colspan="8" scope="rowgroup"><div class="group-heading"><span class="group-title">'+title+' · '+group.length+' '+(group.length===1?'estado':'estados')+'</span><div class="group-summary">'+summary+'<span class="group-total">'+nf.format(total)+' votos válidos</span></div></div></th></tr>'+group.map(renderRow).join("");
+  return '<tr class="state-group '+key+'"><th colspan="'+(TURN==="1"?8:7)+'" scope="rowgroup"><div class="group-heading"><span class="group-title">'+title+' · '+group.length+' '+(group.length===1?'estado':'estados')+'</span><div class="group-summary">'+summary+'<span class="group-total">'+nf.format(total)+' votos válidos</span></div></div></th></tr>'+group.map(renderRow).join("");
  }).join("");
 }
 function toggleMobileColumns(){
@@ -250,7 +251,7 @@ function render(){
  if(s==="apuracao")a.sort((x,y)=>y.secoesPct-x.secoesPct);
  if(s==="lula")a.sort((x,y)=>y.lula.percentual-x.lula.percentual);
  if(s==="flavio")a.sort((x,y)=>y.flavio.percentual-x.flavio.percentual);
- rows.innerHTML=groupedRows(a,x=>`<tr class="${leaderClass(x)}"><td class="uf">${x.uf}</td><td><div class="mini"><b>${pf(x.secoesPct)}</b><span><i style="width:${Math.min(100,x.secoesPct)}%"></i></span></div></td><td class="red">${pf(x.lula.percentual)}<span class="cell-votes">${nf.format(x.lula.votos)} votos</span></td><td class="blue">${pf(x.flavio.percentual)}<span class="cell-votes">${nf.format(x.flavio.votos)} votos</span></td><td class="purple">${pf(otherPct(x))}<span class="cell-votes">${nf.format(otherVotes(x))} votos</span></td><td>${nf.format(x.validos)}</td><td>${pf(x.pesoBrasil)}</td><td>${nf.format(x.secoesTotalizadas)}${x.secoesTotal?" / "+nf.format(x.secoesTotal):""}</td></tr>`);
+ rows.innerHTML=groupedRows(a,x=>`<tr class="${leaderClass(x)}"><td class="uf">${x.uf}</td><td><div class="mini"><b>${pf(x.secoesPct)}</b><span><i style="width:${Math.min(100,x.secoesPct)}%"></i></span></div></td><td class="red">${pf(x.lula.percentual)}<span class="cell-votes">${nf.format(x.lula.votos)} votos</span></td><td class="blue">${pf(x.flavio.percentual)}<span class="cell-votes">${nf.format(x.flavio.votos)} votos</span></td><td class="purple first-round-only">${pf(otherPct(x))}<span class="cell-votes">${nf.format(otherVotes(x))} votos</span></td><td>${nf.format(x.validos)}</td><td>${pf(x.pesoBrasil)}</td><td>${nf.format(x.secoesTotalizadas)}${x.secoesTotal?" / "+nf.format(x.secoesTotal):""}</td></tr>`);
  errors.innerHTML=DATA.errors.length?`<div class="error"><b>Arquivos não carregados:</b> ${DATA.errors.join(" · ")}</div>`:"";
 }
 function showScreen(){
@@ -276,15 +277,15 @@ function renderProjection(){
  }
  el("projTotal").textContent=nf.format(Math.round(p.total));
  el("projRemaining").textContent=nf.format(Math.round(p.remaining))+" votos restantes estimados nas UFs";
- el("projOthers").textContent="Vermelho: Lula · Azul: Flávio · Roxo: demais candidatos ("+pf(Math.max(0,100-p.lulaPct-p.flavioPct))+")";
+ el("projOthers").textContent="Vermelho: Lula · Azul: Flávio"+(TURN==="1"?" · Roxo: demais candidatos ("+pf(Math.max(0,100-p.lulaPct-p.flavioPct))+")":"");
  const gap=p.lula-p.flavio;
  el("projMargin").textContent=gap===0?"Empate na projeção entre Lula e Flávio.":"Diferença projetada entre os dois: "+nf.format(Math.round(Math.abs(gap)))+" votos a favor de "+(gap>0?"Lula":"Flávio")+" ("+Math.abs(p.lulaPct-p.flavioPct).toFixed(2).replace(".",",")+" p.p.).";
  el("projNational").textContent="Comparação usando apenas o avanço nacional: Lula "+pf(p.currentLulaPct)+", Flávio "+pf(p.currentFlavioPct)+(p.nationalTotal?" · "+nf.format(Math.round(p.nationalTotal))+" votos válidos estimados.":" · volume indisponível.");
  el("projectionRows").innerHTML=groupedRows([...p.states].sort((a,b)=>b.restante-a.restante),s=>
-  '<tr class="'+leaderClass(s)+'"><td class="uf">'+s.uf+'</td><td>'+pf(s.secoesPct)+'</td><td>'+nf.format(s.validos)+'</td><td>'+(s.available?nf.format(Math.round(s.finalValidos)):"Sem base")+'</td><td>'+(s.available?nf.format(Math.round(s.restante)):"—")+'</td><td class="red">'+(s.available?nf.format(Math.round(s.finalLula))+" · "+pf(s.lula.votos/s.validos*100):"—")+'</td><td class="blue">'+(s.available?nf.format(Math.round(s.finalFlavio))+" · "+pf(s.flavio.votos/s.validos*100):"—")+'</td><td class="purple">'+(s.available?nf.format(Math.round(Math.max(0,s.finalValidos-s.finalLula-s.finalFlavio)))+" · "+pf(otherPct(s)):"—")+'</td></tr>');
+  '<tr class="'+leaderClass(s)+'"><td class="uf">'+s.uf+'</td><td>'+pf(s.secoesPct)+'</td><td>'+nf.format(s.validos)+'</td><td>'+(s.available?nf.format(Math.round(s.finalValidos)):"Sem base")+'</td><td>'+(s.available?nf.format(Math.round(s.restante)):"—")+'</td><td class="red">'+(s.available?nf.format(Math.round(s.finalLula))+" · "+pf(s.lula.votos/s.validos*100):"—")+'</td><td class="blue">'+(s.available?nf.format(Math.round(s.finalFlavio))+" · "+pf(s.flavio.votos/s.validos*100):"—")+'</td><td class="purple first-round-only">'+(s.available?nf.format(Math.round(Math.max(0,s.finalValidos-s.finalLula-s.finalFlavio)))+" · "+pf(otherPct(s)):"—")+'</td></tr>');
 }
 document.getElementById("electionTurn").addEventListener("change",event=>{
- TURN=event.target.value;DATA=null;
+ TURN=event.target.value;document.body.dataset.turn=TURN;document.getElementById("resultDataColumns").span=TURN==="1"?6:5;DATA=null;
  document.getElementById("turnStatus").textContent=TURN==="1"?"1º turno · resultado em cache após a primeira consulta":"2º turno · atualização automática a cada minuto";
  document.getElementById("electionSource").textContent="Arquivos JSON EA20 · eleição "+(TURN==="1"?"6257":"6258")+" · "+TURN+"º turno";
  for(const id of ["validos","pst","lulaPct","lulaVotos","flavioPct","flavioVotos","othersPct","othersVotos","ufsOk","projLula","projLulaVotes","projLulaDelta","projFlavio","projFlavioVotes","projFlavioDelta","projDemais","projDemaisVotes","projDemaisDelta","projTotal","projRemaining","projOthers","projMargin","projNational"])document.getElementById(id).textContent="—";

@@ -1,0 +1,6 @@
+body[data-turn="2"] .first-round-only{display:none!important}
+body[data-turn="2"] .candidates{grid-template-columns:repeat(2,minmax(0,1fr))}
+body[data-turn="2"] .projection-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.map-tooltip .map-popup-validos{border-top:1px solid #68788b66;padding-top:10px;margin-top:12px;font-size:12px;font-weight:650;color:#edf4ff;font-variant-numeric:tabular-nums}
+@media(max-width:1050px){body[data-turn="2"] .projection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){body[data-turn="2"] .candidates,body[data-turn="2"] .projection-grid{grid-template-columns:1fr}}

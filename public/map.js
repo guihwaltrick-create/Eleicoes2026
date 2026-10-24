@@ -46,7 +46,7 @@
       {name:'Demais candidatos',key:'others',votes:Math.max(0,row.validos-row.lula.votos-row.flavio.votos),pct:row.validos ? Math.max(0,row.validos-row.lula.votos-row.flavio.votos)/row.validos*100 : 0}
     ].sort((a,b) => b.votes-a.votes);
     const others=items.find(item=>item.key==='others');
-    el('mapOthers').textContent='Demais candidatos · '+percent(others.pct)+' · '+nf.format(others.votes)+' votos';
+    el('mapOthers').textContent=turn==='1'?'Demais candidatos · '+percent(others.pct)+' · '+nf.format(others.votes)+' votos':'';
     for (const item of items.filter(item=>item.key!=='others')) {
       const card = document.createElement('div'); card.className = 'map-candidate '+item.key;
       if (item.photo) {const photo = document.createElement('img');photo.src=item.photo;photo.alt=item.name;photo.className='map-candidate-photo';card.append(photo);}
@@ -88,7 +88,8 @@
         const info=popupNode('div','map-popup-candidate-info');info.append(popupNode('strong','',item.name),popupNode('span','',item.party),popupNode('small','',nf.format(item.votos)+' votos'));line.append(info,popupNode('b','',percent(item.percentual)));popup.append(line);
       }
       const others=Math.max(0,row.validos-row.lula.votos-row.flavio.votos);
-      popup.append(popupNode('div','map-popup-others','Demais candidatos · '+percent(row.validos?others/row.validos*100:0)+' · '+nf.format(others)+' votos'));
+      popup.append(popupNode('div','map-popup-validos','Total de votos válidos: '+nf.format(row.validos)));
+      if(turn==='1')popup.append(popupNode('div','map-popup-others','Demais candidatos · '+percent(row.validos?others/row.validos*100:0)+' · '+nf.format(others)+' votos'));
       const margin=Math.abs(row.lula.percentual-row.flavio.percentual);
       const ahead=leader(row);
       popup.append(popupNode('div','map-popup-margin '+ahead,ahead==='tie'?'Empate entre Lula e Flávio':(ahead==='lula'?'Lula':'Flávio')+' à frente por '+margin.toFixed(2).replace('.',',')+' p.p.'));
