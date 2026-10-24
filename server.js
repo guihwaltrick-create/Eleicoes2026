@@ -171,4 +171,7 @@ const server = http.createServer(async (req,res) => {
   });
 });
 if (require.main === module) server.listen(PORT,()=>console.log(`Dashboard: http://localhost:${PORT}`));
-module.exports = {server, normalize};
+// A Vercel recebe uma função HTTP; o servidor também fica disponível para testes locais.
+module.exports = server.listeners("request")[0];
+module.exports.server = server;
+module.exports.normalize = normalize;

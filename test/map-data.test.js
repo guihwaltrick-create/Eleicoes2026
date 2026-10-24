@@ -5,6 +5,9 @@ const {createMapService} = require('../map-data');
 const {normalize,server} = require('../server');
 const raw = {dg:'24/10/2026',hg:'10:00:00',s:{st:'8',ts:'10',pst:'80,00'},v:{vvc:'100'},carg:[{cd:'1',agr:[{par:[{cand:[{nmu:'LULA',vap:'60',pvap:'60,00'},{nmu:'FLAVIO BOLSONARO',vap:'30',pvap:'30,00'}]}]}]}]};
 const catalog = {abr:[{cd:'ac',ds:'ACRE',mu:[{cd:'1120',cdi:'1200013',nm:'ACRELÂNDIA'},{cd:'01570',cdi:'1200054',nm:'ASSIS BRASIL'}]},{cd:'zz',ds:'EXTERIOR',mu:[]}]};
+test('exporta uma função HTTP para a Vercel sem iniciar uma porta ao importar',()=>{
+ const handler=require('../server');assert.equal(typeof handler,'function');assert.strictEqual(handler,server.listeners('request')[0]);assert.equal(server.listening,false);
+});
 test('normaliza a estrutura EA20 municipal e mantém os votos de cada candidato',()=>{
  const row=normalize(raw,'ac');assert.equal(row.lula.votos,60);assert.equal(row.flavio.percentual,30);assert.equal(row.secoesPct,80);assert.equal(row.validos,100);
 });
