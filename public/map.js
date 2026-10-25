@@ -91,7 +91,21 @@
     if(!(fraction>0&&fraction<=1))return null;
     return {lula:row.lula.votos/fraction,flavio:row.flavio.votos/fraction,total:row.validos/fraction,partial:false};
   }
+  function updateCountingProgress(row){
+    const raw=row?.secoesPct;
+    const value=raw!==null&&raw!==undefined&&raw!==''?Number(raw):NaN;
+    const available=row&&!row.indisponivel&&Number.isFinite(value);
+    el('mapCounting').hidden=!available;
+    if(!available)return;
+    const pct=Math.max(0,Math.min(100,value));
+    el('mapCountingPercent').textContent=percent(pct);
+    el('mapCountingFill').style.width=pct+'%';
+    el('mapCountingBar').setAttribute('aria-valuenow',String(pct));
+    el('mapCountingBar').setAttribute('aria-valuetext',percent(pct)+' das seções totalizadas');
+    el('mapCountingSections').textContent=row.secoesTotal>0?nf.format(row.secoesTotalizadas)+' de '+nf.format(row.secoesTotal)+' seções totalizadas':'Percentual de seções totalizadas pelo TSE';
+  }
   function ranking(row, label) {
+    updateCountingProgress(row);
     el('mapLocation').textContent = label;
     el('mapProjectionToggle').hidden=true;
     el('mapOthers').textContent='';
@@ -458,7 +472,7 @@
     syncViewButtons();listLimit=120;
     hidePopup();selectedCity=null;selectedState=null;el('electionMap').classList.remove('has-selection');el('mapClearCity').hidden=true;cities=null;geography=null;setLoading(true);
     el('mapSearch').value='';el('mapPlaces').replaceChildren();el('electionMap').replaceChildren();
-    if(region!==previousRegion){el('mapCards').replaceChildren();el('mapProjectionToggle').hidden=true;}
+    if(region!==previousRegion){el('mapCounting').hidden=true;el('mapCards').replaceChildren();el('mapProjectionToggle').hidden=true;}
     el('mapLocation').textContent=region==='br'?'Brasil':el('mapState').selectedOptions[0].textContent;
     el('mapDetail').textContent='';el('mapOthers').textContent='';el('mapSource').textContent='';list();
     el('mapStatus').textContent=exteriorView()?'Carregando mapa e votação no exterior…':nationalCityView()?'Carregando Brasil · Cidades…':region==='br'?'Carregando mapa dos estados…':'Carregando limites e resultados dos municípios. Estados com muitas cidades podem levar cerca de um minuto…';
