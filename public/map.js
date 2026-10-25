@@ -22,10 +22,15 @@
   function regionColor(row){
     const ahead=leader(row);
     if(ahead==='missing'||ahead==='tie')return colors[ahead];
-    const share=Math.max(0,Math.min(100,Number(row[ahead].percentual)||0))/100;
-    const light=ahead==='flavio'?[161,205,247]:[250,177,187];
-    const strong=ahead==='flavio'?[0,77,211]:[212,0,34];
-    return '#'+light.map((value,index)=>Math.round(value+(strong[index]-value)*share).toString(16).padStart(2,'0')).join('');
+    const share=Math.max(0,Math.min(100,Number(row[ahead].percentual)||0));
+    // Mais contraste nas faixas em que os resultados costumam se concentrar.
+    const stops=ahead==='flavio'
+      ? [[0,[235,246,255]],[40,[198,226,255]],[50,[135,193,250]],[60,[36,143,238]],[70,[0,83,184]],[80,[0,43,112]],[100,[0,16,48]]]
+      : [[0,[255,240,242]],[40,[255,208,215]],[50,[255,151,166]],[60,[244,64,88]],[70,[187,0,35]],[80,[116,0,24]],[100,[48,0,12]]];
+    const end=stops.findIndex(stop=>stop[0]>=share);
+    const [low,light]=stops[Math.max(0,end-1)], [high,strong]=stops[end];
+    const weight=high===low?0:(share-low)/(high-low);
+    return '#'+light.map((value,index)=>Math.round(value+(strong[index]-value)*weight).toString(16).padStart(2,'0')).join('');
   }
   const lookup = () => new Map((stateView() ? national?.estados || [] : cities?.municipios || []).map(r => [stateView() ? r.uf : r.ibge,r]));
   async function json(url) {

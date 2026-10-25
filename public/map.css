@@ -62,7 +62,7 @@
 #mapaScreen .map-status{min-height:24px}
 .map-tooltip{position:fixed;z-index:1000;width:310px;max-width:calc(100vw - 24px);padding:14px;border:1px solid #728097;border-radius:14px;background:linear-gradient(145deg,#343a45f7,#202735fa);box-shadow:0 16px 50px #0008;backdrop-filter:blur(16px);color:#f3f6fc;font-size:12px;line-height:1.4;text-align:left}
 .map-tooltip .map-popup-heading{display:flex;gap:9px;align-items:center;margin-bottom:14px}
-.map-tooltip .map-popup-badge{border-radius:7px;min-width:30px;padding:6px;background:#0875dc;color:#fff;text-align:center;font-weight:750;font-size:11px}
+.map-tooltip .map-popup-badge{border-radius:7px;min-width:30px;padding:6px;background:var(--general-yellow,#eab500);color:#292d32;text-align:center;font-weight:750;font-size:11px}
 .map-tooltip .map-popup-location{min-width:0;flex:1}
 .map-tooltip .map-popup-location strong{display:block;font-size:13px}
 .map-tooltip .map-popup-location span{display:block;color:#c1ccdb;font-size:10px;margin-top:2px}
@@ -84,9 +84,9 @@
 .map-tooltip .map-popup-action{width:100%;margin-top:10px;padding:8px;border:1px solid #647994;border-radius:7px;background:#24374f;color:#edf4ff;cursor:pointer;font-size:11px}
 .tabs{max-width:100%;flex-wrap:wrap}
 #mapaScreen .map-intensity-legend{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px;color:var(--muted);font-size:11px;margin:10px 0}
-#mapaScreen .map-intensity-scale{display:inline-block;width:90px;height:7px;border-radius:8px}
-#mapaScreen .blue-scale{background:linear-gradient(90deg,#a1cdf7,#004dd3)}
-#mapaScreen .red-scale{background:linear-gradient(90deg,#fab1bb,#d40022)}
+#mapaScreen .map-intensity-scale{display:inline-block;width:140px;height:10px;border-radius:8px}
+#mapaScreen .blue-scale{background:linear-gradient(90deg,#ebf6ff 0%,#c6e2ff 40%,#87c1fa 50%,#248fee 60%,#0053b8 70%,#002b70 80%,#001030 100%)}
+#mapaScreen .red-scale{background:linear-gradient(90deg,#fff0f2 0%,#ffd0d7 40%,#ff97a6 50%,#f44058 60%,#bb0023 70%,#740018 80%,#30000c 100%)}
 @media(max-width:1200px){
  #mapaScreen .map-canvas{grid-template-columns:250px minmax(0,1fr);gap:16px;padding:16px}
  #mapaScreen .map-sidebar{grid-column:1 / -1;height:380px}
@@ -119,7 +119,7 @@
  #mapaScreen .map-places{grid-template-columns:1fr}
  #mapaScreen .map-legend{font-size:10px;gap:8px 14px}
  #mapaScreen .map-intensity-legend{font-size:10px}
- #mapaScreen .map-intensity-scale{width:65px}
+ #mapaScreen .map-intensity-scale{width:95px}
  .tabs a{padding:10px 8px;font-size:12px}
 }
 
