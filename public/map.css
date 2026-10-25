@@ -162,3 +162,9 @@
 
 #mapaScreen .map-canvas #electionMap.is-world-map{height:650px}
 @media(max-width:700px){#mapaScreen .map-canvas #electionMap.is-world-map{height:auto;aspect-ratio:3 / 2}#mapaScreen .map-view-switch>span{display:none}#mapaScreen .map-view-switch button{padding:6px 8px}}
+
+#mapaScreen #electionMap path[data-id]{transition:fill .18s,opacity .18s,filter .18s}
+#mapaScreen #electionMap.has-selection path[data-id]:not(.is-selected){opacity:.24;filter:grayscale(.9)}
+#mapaScreen #electionMap.has-selection path[data-id].is-selected{opacity:1;stroke:#fff;stroke-width:2;filter:brightness(1.12)}
+#mapaScreen #electionMap.has-selection .map-state-labels text:not(.is-selected),#mapaScreen #electionMap.has-selection .map-label-line{opacity:.3}
+@media(prefers-reduced-motion:reduce){#mapaScreen #electionMap path[data-id]{transition:none}}
