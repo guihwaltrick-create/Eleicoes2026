@@ -214,3 +214,25 @@ O projeto utiliza um servidor Node.js para consultar o TSE. GitHub Pages sozinho
 Guilherme Waltrick — (49) 99907-0882
 
 Projeto independente, sem vínculo com a Justiça Eleitoral.
+
+## Chat público
+
+O botão Chat abre uma conversa compartilhada por todos os visitantes, inclusive
+no mapa em tela cheia. Não exige login: o nome informado é um apelido, sem
+verificação de identidade. A conversa carrega as últimas 100 mensagens e consulta
+novas mensagens a cada 4 segundos somente enquanto o painel está aberto e a aba
+está visível. O envio só aparece como concluído após confirmação do servidor;
+falhas preservam o texto para nova tentativa.
+
+Execute `supabase/migrations/202610250004_chat.sql` no SQL Editor do mesmo projeto.
+O backend usa as variáveis `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` já existentes.
+A tabela tem RLS e acesso somente pelo servidor. A API `/api/chat` não expõe IDs
+de visitantes nem identificadores de rede. Um cookie assinado HttpOnly identifica
+as mensagens do navegador. Os nomes e textos são renderizados como texto simples.
+
+O banco limita cada visitante a um envio a cada 3 segundos e cada identificador
+de rede a 15 envios por minuto; o endereço é armazenado somente como HMAC. Um ID
+por tentativa permite repetir envios após falhas sem duplicar a mensagem. As
+mensagens ficam armazenadas no Supabase; o limite de 100 se aplica à exibição,
+não à retenção. Os arquivos `chat-preview.js` e `chat-preview.css` mantêm os nomes
+da primeira versão visual, mas agora integram o chat compartilhado.

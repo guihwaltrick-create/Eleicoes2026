@@ -9,6 +9,8 @@ const { createPresenceHandler } = require("./online-presence");
 const onlinePresence = createPresenceHandler();
 const { createAnnouncementsHandler } = require('./announcements');
 const announcements = createAnnouncementsHandler();
+const {createChatHandler} = require('./chat');
+const chat = createChatHandler();
 
 const { electionFor } = require("./elections");
 const { createResultCache } = require("./result-cache");
@@ -130,6 +132,7 @@ function send(res, code, type, body) {
 
 const server = http.createServer(async (req,res) => {
   const u = new URL(req.url, `http://${req.headers.host}`);
+  if (u.pathname === '/api/chat') return chat(req,res);
   if (u.pathname === '/api/online') return onlinePresence(req, res);
   if (u.pathname === '/api/announcements' || u.pathname.startsWith('/api/admin/')) return announcements(req,res,u.pathname);
   let election;
