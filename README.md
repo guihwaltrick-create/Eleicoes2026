@@ -6,6 +6,7 @@ Painel independente criado por **Guilherme Waltrick · GW Soluções Digitais**,
 
 - Apuração nacional e dos 27 estados/DF para presidente.
 - Aba Mapa com estados e municípios: azul para Flávio à frente e vermelho para Lula.
+- Visão Exterior no mapa mundial, com soma de votos por país, busca e popups.
 - Busca por cidade, zoom e cartões ordenados por votos no local selecionado.
 - Votos e percentuais de Lula, Flávio Bolsonaro e demais candidatos.
 - Estados agrupados por liderança, com totais e percentuais ponderados.
@@ -149,6 +150,18 @@ Documentação oficial: [TSE](https://www.tse.jus.br/eleicoes/informacoes-tecnic
 ```bash
 node --test
 ```
+
+## Mapa do exterior
+
+Na visão Exterior, os resultados de presidente são consultados nos arquivos ZZ
+do TSE, em lotes de 50 localidades. Os países são calculados por soma de votos
+e seções, sem média de percentuais; a associação dos locais aos países e as fontes
+da malha mundial estão em `data/README.md`. O resumo do exterior usa o arquivo
+consolidado ZZ, sem somá-lo novamente ao Brasil. Consultas incompletas são marcadas
+como parciais, e falhas na atualização preservam os dados anteriores sinalizados.
+O segundo turno atualiza em segundo plano e o primeiro é reutilizado após sua
+consulta inicial. A API `/api/exterior?turno=2&pagina=0` fornece o resumo oficial,
+o catálogo de países e o lote de localidades usado na visão.
 
 ## Projeções
 

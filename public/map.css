@@ -159,3 +159,6 @@
 #mapaScreen .map-projection-toggle:hover{background:#ffffff0a;color:#edf4ff}
 #mapaScreen .map-projection-toggle svg{display:block;flex:0 0 14px;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 #mapaScreen .map-projection-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}
+
+#mapaScreen .map-canvas #electionMap.is-world-map{height:650px}
+@media(max-width:700px){#mapaScreen .map-canvas #electionMap.is-world-map{height:auto;aspect-ratio:3 / 2}#mapaScreen .map-view-switch>span{display:none}#mapaScreen .map-view-switch button{padding:6px 8px}}

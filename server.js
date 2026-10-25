@@ -4,6 +4,7 @@ const path = require("path");
 if (fs.existsSync(path.join(__dirname, '.env'))) process.loadEnvFile(path.join(__dirname, '.env'));
 const { URL } = require("url");
 const { createMapService, STATE_IDS } = require("./map-data");
+const { createExteriorService } = require("./exterior-data");
 const { createPresenceHandler } = require("./online-presence");
 const onlinePresence = createPresenceHandler();
 
@@ -98,6 +99,7 @@ async function getJSON(uf, election) {
   catch (e) { throw new Error(`${uf.toUpperCase()}: TSE ${e.message}`); }
 }
 const mapService = createMapService({fetchJSON, normalize});
+const exteriorService = createExteriorService({fetchJSON, normalize});
 
 async function snapshot(turn = "2") {
   const election = electionFor(turn);
@@ -131,6 +133,12 @@ const server = http.createServer(async (req,res) => {
   if(u.pathname.startsWith("/api/")){
     try {election=electionFor(u.searchParams.get("turno")??"2");}
     catch(e){return send(res,400,"application/json",JSON.stringify({error:e.message}));}
+  }
+  if (u.pathname === '/api/exterior') {
+    const value = u.searchParams.get('pagina') || '0', page = Number(value);
+    if (!/^\d+$/.test(value) || !Number.isSafeInteger(page) || page > 100) return send(res,400,'application/json',JSON.stringify({error:'Página inválida'}));
+    try {return send(res,200,'application/json; charset=utf-8',JSON.stringify(await exteriorService.page(page,election.turno)));}
+    catch {return send(res,502,'application/json',JSON.stringify({error:'Não foi possível consultar o exterior no TSE.'}));}
   }
   if(u.pathname==="/api/municipios/catalogo"){
     try {

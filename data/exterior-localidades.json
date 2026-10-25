@@ -1,0 +1,750 @@
+{
+  "fonte": "TSE · Eleitorado por local de votação 2026 (ZZ)",
+  "geradoEm": "24/10/2026 20:27:58",
+  "localidades": {
+    "29173": {
+      "nome": "KATMANDU",
+      "pais": "NP"
+    },
+    "29254": {
+      "nome": "ABIDJÃ",
+      "pais": "CI"
+    },
+    "29262": {
+      "nome": "ABU DHABI",
+      "pais": "AE"
+    },
+    "29270": {
+      "nome": "ACCRA",
+      "pais": "GH"
+    },
+    "29289": {
+      "nome": "AMÃ",
+      "pais": "JO"
+    },
+    "29297": {
+      "nome": "ANCARA",
+      "pais": "TR"
+    },
+    "29300": {
+      "nome": "ARGEL",
+      "pais": "DZ"
+    },
+    "29319": {
+      "nome": "ARTIGAS",
+      "pais": "UY"
+    },
+    "29327": {
+      "nome": "ASSUNÇÃO",
+      "pais": "PY"
+    },
+    "29335": {
+      "nome": "ATENAS",
+      "pais": "GR"
+    },
+    "29343": {
+      "nome": "BANGKOK",
+      "pais": "TH"
+    },
+    "29351": {
+      "nome": "BARCELONA",
+      "pais": "ES"
+    },
+    "29360": {
+      "nome": "BEIRUTE",
+      "pais": "LB"
+    },
+    "29378": {
+      "nome": "BELGRADO",
+      "pais": "RS"
+    },
+    "29386": {
+      "nome": "BERLIM",
+      "pais": "DE"
+    },
+    "29394": {
+      "nome": "BISSAU",
+      "pais": "GW"
+    },
+    "29408": {
+      "nome": "BOGOTÁ",
+      "pais": "CO"
+    },
+    "29416": {
+      "nome": "BOSTON",
+      "pais": "US"
+    },
+    "29424": {
+      "nome": "BRIDGETOWN",
+      "pais": "BB"
+    },
+    "29432": {
+      "nome": "BRUXELAS",
+      "pais": "BE"
+    },
+    "29440": {
+      "nome": "BUCARESTE",
+      "pais": "RO"
+    },
+    "29459": {
+      "nome": "BUDAPESTE",
+      "pais": "HU"
+    },
+    "29467": {
+      "nome": "BUENOS AIRES",
+      "pais": "AR"
+    },
+    "29475": {
+      "nome": "CAIENA",
+      "pais": "FR"
+    },
+    "29483": {
+      "nome": "CAIRO",
+      "pais": "EG"
+    },
+    "29491": {
+      "nome": "CAMBERRA",
+      "pais": "AU"
+    },
+    "29505": {
+      "nome": "CARACAS",
+      "pais": "VE"
+    },
+    "29513": {
+      "nome": "CHICAGO",
+      "pais": "US"
+    },
+    "29521": {
+      "nome": "CHUY",
+      "pais": "UY"
+    },
+    "29530": {
+      "nome": "CIDADE DO CABO",
+      "pais": "ZA"
+    },
+    "29548": {
+      "nome": "SINGAPURA",
+      "pais": "SG"
+    },
+    "29556": {
+      "nome": "CIUDAD DEL ESTE",
+      "pais": "PY"
+    },
+    "29564": {
+      "nome": "CIUDAD GUAYANA",
+      "pais": "VE"
+    },
+    "29572": {
+      "nome": "COCHABAMBA",
+      "pais": "BO"
+    },
+    "29580": {
+      "nome": "CONCEPCIÓN",
+      "pais": "PY"
+    },
+    "29599": {
+      "nome": "COPENHAGUE",
+      "pais": "DK"
+    },
+    "29602": {
+      "nome": "CÓRDOBA",
+      "pais": "AR"
+    },
+    "29610": {
+      "nome": "DACAR",
+      "pais": "SN"
+    },
+    "29629": {
+      "nome": "DACCA",
+      "pais": "BD"
+    },
+    "29637": {
+      "nome": "DAMASCO",
+      "pais": "SY"
+    },
+    "29645": {
+      "nome": "DÍLI",
+      "pais": "TL"
+    },
+    "29653": {
+      "nome": "DOHA",
+      "pais": "QA"
+    },
+    "29661": {
+      "nome": "DUBLIN",
+      "pais": "IE"
+    },
+    "29670": {
+      "nome": "ENCARNACIÓN",
+      "pais": "PY"
+    },
+    "29688": {
+      "nome": "ESTOCOLMO",
+      "pais": "SE"
+    },
+    "29696": {
+      "nome": "FRANKFURT",
+      "pais": "DE"
+    },
+    "29700": {
+      "nome": "GENEBRA",
+      "pais": "CH"
+    },
+    "29718": {
+      "nome": "GEORGETOWN",
+      "pais": "GY"
+    },
+    "29742": {
+      "nome": "HAMAMATSU",
+      "pais": "JP"
+    },
+    "29750": {
+      "nome": "HANÓI",
+      "pais": "VN"
+    },
+    "29769": {
+      "nome": "HARARE",
+      "pais": "ZW"
+    },
+    "29777": {
+      "nome": "HAVANA",
+      "pais": "CU"
+    },
+    "29785": {
+      "nome": "HELSINQUE",
+      "pais": "FI"
+    },
+    "29793": {
+      "nome": "HONG KONG",
+      "pais": "CN"
+    },
+    "29807": {
+      "nome": "HOUSTON",
+      "pais": "US"
+    },
+    "29815": {
+      "nome": "IAUNDÊ",
+      "pais": "CM"
+    },
+    "29823": {
+      "nome": "IQUITOS",
+      "pais": "PE"
+    },
+    "29831": {
+      "nome": "ISLAMABADE",
+      "pais": "PK"
+    },
+    "29840": {
+      "nome": "JACARTA",
+      "pais": "ID"
+    },
+    "29858": {
+      "nome": "KIEV",
+      "pais": "UA"
+    },
+    "29874": {
+      "nome": "KINSHASA",
+      "pais": "CD"
+    },
+    "29882": {
+      "nome": "KUAITE",
+      "pais": "KW"
+    },
+    "29890": {
+      "nome": "KUALA LUMPUR",
+      "pais": "MY"
+    },
+    "29904": {
+      "nome": "LA PAZ",
+      "pais": "BO"
+    },
+    "29912": {
+      "nome": "LAGOS",
+      "pais": "NG"
+    },
+    "29939": {
+      "nome": "LIBREVILLE",
+      "pais": "GA"
+    },
+    "29947": {
+      "nome": "LIMA",
+      "pais": "PE"
+    },
+    "29955": {
+      "nome": "LISBOA",
+      "pais": "PT"
+    },
+    "29963": {
+      "nome": "LOMÉ",
+      "pais": "TG"
+    },
+    "29971": {
+      "nome": "LONDRES",
+      "pais": "GB"
+    },
+    "29980": {
+      "nome": "LOS ANGELES",
+      "pais": "US"
+    },
+    "29998": {
+      "nome": "LUANDA",
+      "pais": "AO"
+    },
+    "30066": {
+      "nome": "MADRI",
+      "pais": "ES"
+    },
+    "30074": {
+      "nome": "MANÁGUA",
+      "pais": "NI"
+    },
+    "30082": {
+      "nome": "MANILA",
+      "pais": "PH"
+    },
+    "30090": {
+      "nome": "MAPUTO",
+      "pais": "MZ"
+    },
+    "30104": {
+      "nome": "MEXICO",
+      "pais": "MX"
+    },
+    "30112": {
+      "nome": "MIAMI",
+      "pais": "US"
+    },
+    "30120": {
+      "nome": "MILÃO",
+      "pais": "IT"
+    },
+    "30147": {
+      "nome": "MONTEVIDÉU",
+      "pais": "UY"
+    },
+    "30155": {
+      "nome": "MONTREAL",
+      "pais": "CA"
+    },
+    "30163": {
+      "nome": "MOSCOU",
+      "pais": "RU"
+    },
+    "30171": {
+      "nome": "MUMBAI",
+      "pais": "IN"
+    },
+    "30180": {
+      "nome": "MUNIQUE",
+      "pais": "DE"
+    },
+    "30198": {
+      "nome": "NAGÓIA",
+      "pais": "JP"
+    },
+    "30201": {
+      "nome": "NAIRÓBI",
+      "pais": "KE"
+    },
+    "30210": {
+      "nome": "NOVA DELHI",
+      "pais": "IN"
+    },
+    "30228": {
+      "nome": "NOVA YORK",
+      "pais": "US"
+    },
+    "30244": {
+      "nome": "OSLO",
+      "pais": "NO"
+    },
+    "30252": {
+      "nome": "OTTAWA",
+      "pais": "CA"
+    },
+    "30260": {
+      "nome": "PANAMA",
+      "pais": "PA"
+    },
+    "30279": {
+      "nome": "PARAMARIBO",
+      "pais": "SR"
+    },
+    "30287": {
+      "nome": "PARIS",
+      "pais": "FR"
+    },
+    "30295": {
+      "nome": "PASO LOS LIBRES",
+      "pais": "AR"
+    },
+    "30309": {
+      "nome": "PEDRO JUAN CABALLERO",
+      "pais": "PY"
+    },
+    "30317": {
+      "nome": "PEQUIM",
+      "pais": "CN"
+    },
+    "30325": {
+      "nome": "PORT OF SPAIN",
+      "pais": "TT"
+    },
+    "30333": {
+      "nome": "PORTO PRÍNCIPE",
+      "pais": "HT"
+    },
+    "30341": {
+      "nome": "PORTO",
+      "pais": "PT"
+    },
+    "30350": {
+      "nome": "PRAGA",
+      "pais": "CZ"
+    },
+    "30368": {
+      "nome": "PRAIA",
+      "pais": "CV"
+    },
+    "30376": {
+      "nome": "PRETÓRIA",
+      "pais": "ZA"
+    },
+    "30392": {
+      "nome": "QUITO",
+      "pais": "EC"
+    },
+    "30406": {
+      "nome": "RABAT",
+      "pais": "MA"
+    },
+    "30414": {
+      "nome": "RAMALLAH",
+      "pais": "PS"
+    },
+    "30422": {
+      "nome": "RIADE",
+      "pais": "SA"
+    },
+    "30430": {
+      "nome": "RIO BRANCO",
+      "pais": "UY"
+    },
+    "30449": {
+      "nome": "ROMA",
+      "pais": "IT"
+    },
+    "30457": {
+      "nome": "AMSTERDÃ",
+      "pais": "NL"
+    },
+    "30465": {
+      "nome": "SALTO DEL GUAIRÁ",
+      "pais": "PY"
+    },
+    "30473": {
+      "nome": "SANTA CRUZ DE LA SIERRA",
+      "pais": "BO"
+    },
+    "30481": {
+      "nome": "SANTIAGO",
+      "pais": "CL"
+    },
+    "30490": {
+      "nome": "SÃO DOMINGOS",
+      "pais": "DO"
+    },
+    "30503": {
+      "nome": "SÃO FRANCISCO",
+      "pais": "US"
+    },
+    "30511": {
+      "nome": "SÃO JOSÉ",
+      "pais": "CR"
+    },
+    "30520": {
+      "nome": "SÃO SALVADOR",
+      "pais": "SV"
+    },
+    "30538": {
+      "nome": "SEUL",
+      "pais": "KR"
+    },
+    "30546": {
+      "nome": "SÓFIA",
+      "pais": "BG"
+    },
+    "30562": {
+      "nome": "SYDNEY",
+      "pais": "AU"
+    },
+    "30570": {
+      "nome": "TAIPÉ",
+      "pais": "TW"
+    },
+    "30597": {
+      "nome": "TEERÃ",
+      "pais": "IR"
+    },
+    "30600": {
+      "nome": "TEGUCIGALPA",
+      "pais": "HN"
+    },
+    "30619": {
+      "nome": "TEL AVIV",
+      "pais": "IL"
+    },
+    "30627": {
+      "nome": "TÓQUIO",
+      "pais": "JP"
+    },
+    "30635": {
+      "nome": "TORONTO",
+      "pais": "CA"
+    },
+    "30651": {
+      "nome": "CANTÃO",
+      "pais": "CN"
+    },
+    "30669": {
+      "nome": "GABORONE",
+      "pais": "BW"
+    },
+    "30686": {
+      "nome": "TRÍPOLI",
+      "pais": "LY"
+    },
+    "30708": {
+      "nome": "TUNIS",
+      "pais": "TN"
+    },
+    "30740": {
+      "nome": "VARSÓVIA",
+      "pais": "PL"
+    },
+    "30767": {
+      "nome": "VIENA",
+      "pais": "AT"
+    },
+    "30783": {
+      "nome": "WASHINGTON",
+      "pais": "US"
+    },
+    "30805": {
+      "nome": "WELLINGTON",
+      "pais": "NZ"
+    },
+    "30821": {
+      "nome": "WINDHOEK",
+      "pais": "NA"
+    },
+    "30848": {
+      "nome": "XANGAI",
+      "pais": "CN"
+    },
+    "30864": {
+      "nome": "ZURIQUE",
+      "pais": "CH"
+    },
+    "30902": {
+      "nome": "HARTFORD",
+      "pais": "US"
+    },
+    "30929": {
+      "nome": "COLOMBO",
+      "pais": "LK"
+    },
+    "30961": {
+      "nome": "FARO",
+      "pais": "PT"
+    },
+    "30988": {
+      "nome": "SARAJEVO",
+      "pais": "BA"
+    },
+    "38881": {
+      "nome": "BELMOPAN",
+      "pais": "BZ"
+    },
+    "38903": {
+      "nome": "CONACRI",
+      "pais": "GN"
+    },
+    "38920": {
+      "nome": "COTONOU",
+      "pais": "BJ"
+    },
+    "38962": {
+      "nome": "DAR ES SALAAM",
+      "pais": "TZ"
+    },
+    "38989": {
+      "nome": "IEREVAN",
+      "pais": "AM"
+    },
+    "39004": {
+      "nome": "MENDOZA",
+      "pais": "AR"
+    },
+    "39020": {
+      "nome": "ZAGREB",
+      "pais": "HR"
+    },
+    "39063": {
+      "nome": "VANCOUVER",
+      "pais": "CA"
+    },
+    "39080": {
+      "nome": "ATLANTA",
+      "pais": "US"
+    },
+    "39102": {
+      "nome": "MASCATE",
+      "pais": "OM"
+    },
+    "39128": {
+      "nome": "BAKU",
+      "pais": "AZ"
+    },
+    "39160": {
+      "nome": "LIUBLIANA",
+      "pais": "SI"
+    },
+    "39187": {
+      "nome": "BRAZZAVILLE",
+      "pais": "CG"
+    },
+    "39209": {
+      "nome": "BRATISLAVA",
+      "pais": "SK"
+    },
+    "39225": {
+      "nome": "SÃO TOMÉ",
+      "pais": "ST"
+    },
+    "39241": {
+      "nome": "ASTANA",
+      "pais": "KZ"
+    },
+    "39263": {
+      "nome": "MALABO",
+      "pais": "GQ"
+    },
+    "39284": {
+      "nome": "UAGADUGU",
+      "pais": "BF"
+    },
+    "39306": {
+      "nome": "ISTAMBUL",
+      "pais": "TR"
+    },
+    "39322": {
+      "nome": "NICOSIA",
+      "pais": "CY"
+    },
+    "98000": {
+      "nome": "GUATEMALA",
+      "pais": "GT"
+    },
+    "99104": {
+      "nome": "TBILISI",
+      "pais": "GE"
+    },
+    "99139": {
+      "nome": "TIRANA",
+      "pais": "AL"
+    },
+    "99147": {
+      "nome": "SAINT JOHNS",
+      "pais": "AG"
+    },
+    "99155": {
+      "nome": "PUERTO IGUAZÚ",
+      "pais": "AR"
+    },
+    "99171": {
+      "nome": "BAGDÁ",
+      "pais": "IQ"
+    },
+    "99180": {
+      "nome": "NASSAU",
+      "pais": "BS"
+    },
+    "99198": {
+      "nome": "ABUJA",
+      "pais": "NG"
+    },
+    "99210": {
+      "nome": "COBIJA",
+      "pais": "BO"
+    },
+    "99236": {
+      "nome": "PUERTO QUIJARRO",
+      "pais": "BO"
+    },
+    "99244": {
+      "nome": "RIVERA",
+      "pais": "UY"
+    },
+    "99279": {
+      "nome": "SANTA ELENA DE UAIRÉN",
+      "pais": "VE"
+    },
+    "99287": {
+      "nome": "LUSACA",
+      "pais": "ZM"
+    },
+    "99295": {
+      "nome": "PYONGYANG",
+      "pais": "KP"
+    },
+    "99317": {
+      "nome": "TALIN",
+      "pais": "EE"
+    },
+    "99325": {
+      "nome": "ADIS ABEBA",
+      "pais": "ET"
+    },
+    "99333": {
+      "nome": "ST GEORGES DE LOYAPOCK",
+      "pais": "FR"
+    },
+    "99341": {
+      "nome": "LILONGUE",
+      "pais": "MW"
+    },
+    "99350": {
+      "nome": "BAMAKO",
+      "pais": "ML"
+    },
+    "99376": {
+      "nome": "YANGON",
+      "pais": "MM"
+    },
+    "99384": {
+      "nome": "CASTRIES",
+      "pais": "LC"
+    },
+    "99430": {
+      "nome": "KINGSTON-JAMAICA",
+      "pais": "JM"
+    },
+    "99473": {
+      "nome": "BAREIN",
+      "pais": "BH"
+    },
+    "99490": {
+      "nome": "ORLANDO",
+      "pais": "US"
+    },
+    "99503": {
+      "nome": "EDIMBURGO",
+      "pais": "GB"
+    },
+    "99511": {
+      "nome": "MARSELHA",
+      "pais": "FR"
+    }
+  }
+}
