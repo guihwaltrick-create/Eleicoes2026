@@ -19,11 +19,21 @@
   let turn='2';
   let national, geography, cities, uf = 'br', selectedCity = null, version = 0, loading = false, zoom = 1, moved = false;
   const pendingUpdates=new Map();
+  let refreshSpinStarted=0,refreshSpinTimer;
   function syncRefreshIndicator(){
     const busy=loading||[...pendingUpdates.values()].includes(turn);
+    clearTimeout(refreshSpinTimer);
+    const refreshButton=el('mapDetailRefresh');
+    if(busy){
+      if(!refreshButton.classList.contains('is-updating'))refreshSpinStarted=performance.now();
+      refreshButton.classList.add('is-updating');
+    }else if(refreshButton.classList.contains('is-updating')){
+      // Uma resposta rápida também precisa renderizar um ciclo de feedback.
+      const remaining=Math.max(0,900-(performance.now()-refreshSpinStarted));
+      refreshSpinTimer=setTimeout(()=>refreshButton.classList.remove('is-updating'),remaining);
+    }
     for(const id of ['mapDetailRefresh','mapRefresh']){
       const button=el(id);
-      button.classList.toggle('is-updating',busy);
       button.setAttribute('aria-busy',String(busy));
       button.disabled=busy;
     }
@@ -422,7 +432,7 @@
   el('mapViewStates').onclick=()=>{nationalView='states';el('mapState').value='br';select();};
   el('mapViewCities').onclick=()=>{nationalView='cities';el('mapState').value='br';select();};
   el('mapState').onchange=select;el('mapSearch').oninput=()=>{listLimit=120;list();};
-  el('mapRefresh').onclick=()=>initialized?select():open();
+  el('mapRefresh').onclick=()=>initialized?(stateView()?window.load():select()):open();
   el('mapBack').onclick=()=>{el('mapState').value='br';select();};
   el('mapDetailRefresh').onclick=()=>el('mapRefresh').click();
   el('mapDetailBack').onclick=()=>el('mapBack').click();
