@@ -26,6 +26,38 @@ npm start
 
 Abra http://localhost:3000. A porta pode ser definida pela variável de ambiente `PORT`.
 
+## Visitantes online
+
+O indicador no cabeçalho e no rodapé do mapa em tela cheia conta navegadores com
+o site visível nos últimos 2 minutos. O navegador consulta `/api/online` a cada
+30 segundos, pausa em abas ocultas e retoma ao voltar. Um cookie assinado,
+`HttpOnly`, compartilhado entre abas identifica o navegador sem guardar nomes,
+IP ou páginas visitadas no banco. Navegadores e dispositivos diferentes contam
+separadamente. Registros expirados são removidos a cada consulta.
+
+Para ativar:
+
+1. Execute `supabase/migrations/202610250001_online_presence.sql` no SQL Editor
+   do projeto Supabase. A migração cria somente a tabela
+   `public.eleicoes2026_online_visitors`, seu índice e a função de presença.
+2. Configure `SUPABASE_URL` e `SUPABASE_SERVICE_ROLE_KEY` nas variáveis de
+   ambiente do servidor. Localmente, copie `.env.example` para `.env`; o
+   servidor carrega esse arquivo automaticamente. Na Vercel, configure as
+   variáveis no projeto antes de publicar uma nova versão.
+3. Abra o site e confira o indicador. `POST /api/online`, sem corpo, deve
+   responder `{"online":1,"windowSeconds":120}` para o primeiro visitante.
+
+A chave `service_role` deve permanecer apenas no servidor. O navegador recebe
+somente a contagem. A tabela usa RLS e não concede acesso a `anon` ou
+`authenticated`; apenas o servidor executa a função de presença. A integração
+usa [funções de banco do Supabase](https://supabase.com/docs/guides/database/functions).
+As chaves de API não substituem o acesso administrativo necessário para aplicar
+SQL: use o SQL Editor, a conexão PostgreSQL ou a
+[Management API com token administrativo](https://supabase.com/docs/reference/api/introduction).
+
+Se o serviço estiver indisponível, o indicador mostra “Online indisponível”,
+sem inventar uma contagem ou interferir na apuração.
+
 ## Turnos e cache
 
 A página sempre abre no **2º turno** (eleição 6258). O seletor no início altera

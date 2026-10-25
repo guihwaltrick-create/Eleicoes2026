@@ -1,8 +1,11 @@
 const http = require("http");
 const fs = require("fs");
 const path = require("path");
+if (fs.existsSync(path.join(__dirname, '.env'))) process.loadEnvFile(path.join(__dirname, '.env'));
 const { URL } = require("url");
 const { createMapService, STATE_IDS } = require("./map-data");
+const { createPresenceHandler } = require("./online-presence");
+const onlinePresence = createPresenceHandler();
 
 const { electionFor } = require("./elections");
 const { createResultCache } = require("./result-cache");
@@ -123,6 +126,7 @@ function send(res, code, type, body) {
 
 const server = http.createServer(async (req,res) => {
   const u = new URL(req.url, `http://${req.headers.host}`);
+  if (u.pathname === '/api/online') return onlinePresence(req, res);
   let election;
   if(u.pathname.startsWith("/api/")){
     try {election=electionFor(u.searchParams.get("turno")??"2");}

@@ -112,9 +112,10 @@ th{background:#fafafa}.group-total{color:var(--text)}
 <link rel="stylesheet" href="/turns.css">
 <link rel="stylesheet" href="/mobile.css">
 <link rel="stylesheet" href="/map-fullscreen.css">
+<link rel="stylesheet" href="/online.css">
 </head>
 <body data-turn="2"><main class="wrap">
-<div class="top"><div><h1>Apuração Presidencial — 2026</h1><div class="sub" id="updated">Carregando dados oficiais do TSE…</div></div><button class="btn" onclick="load()">Atualizar</button></div>
+<div class="top"><div><h1>Apuração Presidencial — 2026</h1><div class="sub" id="updated">Carregando dados oficiais do TSE…</div><span class="online-presence" data-online-presence role="status">Consultando visitantes…</span></div><button class="btn" onclick="load()">Atualizar</button></div>
 <div class="turn-selector"><label for="electionTurn">Turno da eleição</label><select id="electionTurn"><option value="1">1º turno</option><option value="2" selected>2º turno</option></select><span id="turnStatus">2º turno · atualização automática a cada minuto</span></div>
 <nav class="tabs" aria-label="Telas"><a href="#apuracao" id="tabApuracao">Apuração atual</a><a href="#projecao" id="tabProjecao">Projeção</a><a href="#mapa" id="tabMapa">Mapa</a><a href="#sobre" id="tabSobre">Sobre</a></nav>
 <div id="apuracaoScreen"><div class="grid">
@@ -162,7 +163,7 @@ th{background:#fafafa}.group-total{color:var(--text)}
   <div class="map-scoreboard"><div class="map-detail-heading"><h3 id="mapLocation">Brasil</h3><div class="map-detail-actions"><button id="mapClearCity" type="button" title="Voltar ao resumo do estado" aria-label="Voltar ao resumo do estado" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16v16H4zM4 10h16M10 10v10"/></svg></button><button id="mapDetailRefresh" type="button" title="Atualizar os resultados deste local" aria-label="Atualizar os resultados deste local"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15.36-6.36L21 8M21 3v5h-5M21 12a9 9 0 0 1-15.36 6.36L3 16M8 16H3v5"/></svg></button><button id="mapDetailBack" type="button" title="Voltar ao mapa do Brasil" aria-label="Voltar ao mapa do Brasil" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m11 5-7 7 7 7M4 12h16"/></svg></button><button id="mapFullscreen" type="button" aria-label="Abrir mapa em tela cheia" aria-pressed="false" title="Abrir mapa em tela cheia"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></button></div></div><div id="mapCards" class="map-cards"></div><button id="mapProjectionToggle" class="map-projection-toggle" type="button" aria-expanded="false" aria-controls="mapProjection-lula mapProjection-flavio" hidden><span>Ver projeção</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button><div id="mapOthers" class="map-other-summary first-round-only"></div><p id="mapDetail" class="map-file-detail"></p></div>
   <div class="map-stage"><div class="map-view-switch" role="group" aria-label="Visão do mapa do Brasil"><span>Brasil</span><button id="mapViewStates" type="button" aria-pressed="true">Estados</button><button id="mapViewCities" type="button" aria-pressed="false">Cidades</button></div><svg id="electionMap" viewBox="0 0 900 900" role="group" aria-label="Mapa eleitoral interativo. Passe o mouse ou toque em um local para ver os resultados."></svg>
   <div class="map-tools"><button id="mapZoomIn" type="button" aria-label="Ampliar mapa">+</button><button id="mapZoomOut" type="button" aria-label="Reduzir mapa">−</button><button id="mapZoomReset" type="button" aria-label="Restaurar enquadramento">↺</button></div>
-  <div class="map-canvas-hint">Passe o mouse ou toque para ver a apuração</div><div id="mapFullscreenLegend" class="map-fullscreen-legend" hidden></div></div>
+  <div class="map-canvas-hint">Passe o mouse ou toque para ver a apuração</div><div id="mapFullscreenLegend" class="map-fullscreen-legend" hidden><span class="online-presence" data-online-presence role="status">Consultando visitantes…</span></div></div>
  <aside class="map-sidebar"><div class="map-list-heading"><h3 id="mapListTitle">Resumo dos estados</h3><span id="mapListCount"></span></div><p id="mapListSummary" class="map-list-summary"></p><div class="map-search-content"><label for="mapSearch">Buscar estado ou cidade</label><input id="mapSearch" type="search" placeholder="Digite o nome do local…"><div id="mapPlaces" class="map-places"></div></div></aside></div></div>
  <aside id="mapTooltip" class="map-tooltip" role="dialog" aria-label="Resultados do local" hidden></aside>
  <p class="foot">Selecione um estado para abrir os municípios. Use + e arraste para explorar o mapa ampliado. As cores comparam os votos de Lula e Flávio; os cartões mostram a classificação por votos<span class="first-round-only">, incluindo os demais candidatos</span>. Resultados municipais são consultados separadamente e podem ter horários diferentes do total estadual.</p>
@@ -176,6 +177,7 @@ th{background:#fafafa}.group-total{color:var(--text)}
 </section>
 <footer class="creator-signature"><a class="creator-brand" href="#sobre"><img src="/Icone_azul_branco.png" alt="GW Soluções Digitais" width="1673" height="941"><span><strong>Desenvolvido por Guilherme Waltrick</strong><span class="sub" style="display:block">GW Soluções Digitais · (49) 99907-0882</span></span></a><a class="creator-link" href="#sobre">Conheça o criador →</a></footer>
 </main>
+<script src="/online.js"></script>
 <script src="/projection.js"></script>
 <script src="/results-store.js"></script>
 <script src="/map.js"></script>
