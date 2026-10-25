@@ -3,12 +3,13 @@
   root.innerHTML=`<section class="chat-panel" id="chatPreviewPanel" role="dialog" aria-labelledby="chatPreviewTitle" hidden>
     <header class="chat-heading"><div><h2 id="chatPreviewTitle">Conversa da apuração</h2><small>Conversa pública · atualização automática</small></div><button class="chat-close" type="button" aria-label="Fechar chat"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header>
     <p class="chat-note">As mensagens são públicas. Use um apelido e converse com respeito.</p>
-    <p class="chat-status" role="status">Abra o chat para conectar.</p>
-    <div class="chat-messages" role="log" aria-label="Mensagens da conversa" aria-live="polite" aria-relevant="additions"></div>
-    <form class="chat-form"><label class="chat-name">Seu nome <input name="name" aria-label="Seu nome no chat" maxlength="30" value="Visitante" autocomplete="nickname"></label><div class="chat-emoji-picker" id="chatEmojiPicker" role="region" aria-label="Escolha um emoji" hidden></div><div class="chat-compose"><button class="chat-emoji-toggle" type="button" aria-label="Escolher emoji" aria-expanded="false" aria-controls="chatEmojiPicker"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14a4 4 0 0 0 8 0M8 9h.01M16 9h.01"/></svg></button><input name="message" aria-label="Mensagem" placeholder="Escreva uma mensagem…" maxlength="280" autocomplete="off" required><button class="chat-send" type="submit" aria-label="Enviar mensagem" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg></button></div></form>
+    <form class="chat-entry"><h3>Como você quer aparecer?</h3><label for="chatEntryName">Seu nome ou apelido</label><input id="chatEntryName" name="nickname" maxlength="30" placeholder="Digite seu nome" autocomplete="nickname" required aria-describedby="chatNameHint"><p id="chatNameHint">O nome ficará fixo nesta conversa até você atualizar a página.</p><button type="submit">Entrar no chat</button></form>
+    <p hidden class="chat-status" role="status">Abra o chat para conectar.</p>
+    <div hidden class="chat-messages" role="log" aria-label="Mensagens da conversa" aria-live="polite" aria-relevant="additions"></div>
+    <form class="chat-form" hidden><div class="chat-name">Conversando como <strong class="chat-current-name"></strong></div><div class="chat-emoji-picker" id="chatEmojiPicker" role="region" aria-label="Escolha um emoji" hidden></div><div class="chat-compose"><button class="chat-emoji-toggle" type="button" aria-label="Escolher emoji" aria-expanded="false" aria-controls="chatEmojiPicker"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14a4 4 0 0 0 8 0M8 9h.01M16 9h.01"/></svg></button><input name="message" aria-label="Mensagem" placeholder="Escreva uma mensagem…" maxlength="280" autocomplete="off" required><button class="chat-send" type="submit" aria-label="Enviar mensagem" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m22 2-7 20-4-9-9-4 20-7ZM22 2 11 13"/></svg></button></div></form>
   </section><button class="chat-launcher" type="button" aria-controls="chatPreviewPanel" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-8.5 8.5H4l-3 3V11.5a10 10 0 0 1 20 0Z"/><path d="M7 10h8M7 14h5"/></svg><span>Chat</span><span class="chat-unread" role="status" aria-live="polite" aria-atomic="true" hidden></span></button>`;
   document.body.append(root);
-  const panel=root.querySelector('.chat-panel'),launcher=root.querySelector('.chat-launcher'),form=root.querySelector('form'),message=form.elements.message,send=root.querySelector('.chat-send'),log=root.querySelector('.chat-messages');
+  const panel=root.querySelector('.chat-panel'),launcher=root.querySelector('.chat-launcher'),form=root.querySelector('.chat-form'),message=form.elements.message,send=root.querySelector('.chat-send'),log=root.querySelector('.chat-messages');
   const status=root.querySelector('.chat-status'),badge=root.querySelector('.chat-unread');
   const unread=new Set();
   function syncUnread(){
@@ -31,8 +32,20 @@
   document.addEventListener('pointerdown',event=>{if(!picker.contains(event.target)&&!emojiToggle.contains(event.target))showEmojis(false);});
   let ready=false,sending=false,fetching=false,pending=null;
   const messages=new Map();
-  try{form.elements.name.value=localStorage.getItem('eleicoes2026:chat-name')||'Visitante';}catch{}
-  function syncSend(){send.disabled=!ready||sending||!message.value.trim();}
+  const entry=root.querySelector('.chat-entry'),nameInput=entry.elements.nickname;
+  let sessionName='';
+  try{nameInput.value=localStorage.getItem('eleicoes2026:chat-name')||'';}catch{}
+  entry.addEventListener('submit',event=>{
+    event.preventDefault();if(sessionName)return;
+    const name=nameInput.value.replace(/\s+/g,' ').trim();
+    if(!name){nameInput.setCustomValidity('Informe seu nome ou apelido.');nameInput.reportValidity();return;}
+    sessionName=name;root.querySelector('.chat-current-name').textContent=name;
+    nameInput.disabled=true;entry.hidden=true;form.hidden=false;log.hidden=false;status.hidden=false;
+    try{localStorage.setItem('eleicoes2026:chat-name',name);}catch{}
+    syncSend();log.scrollTop=log.scrollHeight;message.focus();
+  });
+  nameInput.addEventListener('input',()=>nameInput.setCustomValidity(''));
+  function syncSend(){send.disabled=!sessionName||!ready||sending||!message.value.trim();}
   function render(rows){
     const atBottom=log.scrollHeight-log.scrollTop-log.clientHeight<60;
     for(const row of rows){
@@ -68,12 +81,12 @@
     }catch(error){status.textContent=error.message||'Chat indisponível. Tentando reconectar…';}
     finally{fetching=false;syncSend();}
   }
-  function toggle(open){panel.hidden=!open;launcher.setAttribute('aria-expanded',String(open));if(open){unread.clear();syncUnread();log.scrollTop=log.scrollHeight;root.querySelector('.chat-close').focus({preventScroll:true});load();}else{showEmojis(false);launcher.focus({preventScroll:true});}}
+  function toggle(open){panel.hidden=!open;launcher.setAttribute('aria-expanded',String(open));if(open){unread.clear();syncUnread();log.scrollTop=log.scrollHeight;(sessionName?root.querySelector('.chat-close'):nameInput).focus({preventScroll:true});load();}else{showEmojis(false);launcher.focus({preventScroll:true});}}
   launcher.onclick=()=>toggle(panel.hidden);root.querySelector('.chat-close').onclick=()=>toggle(false);
   root.addEventListener('keydown',event=>{if(event.key==='Escape'&&!panel.hidden){event.stopPropagation();if(!picker.hidden){showEmojis(false);emojiToggle.focus();}else toggle(false);}});
   message.addEventListener('input',syncSend);
   form.addEventListener('submit',async event=>{
-    event.preventDefault();const text=message.value.trim(),author=form.elements.name.value.trim()||'Visitante';if(!text||sending||!ready)return;
+    event.preventDefault();const text=message.value.trim(),author=sessionName;if(!author||!text||sending||!ready)return;
     if(!pending||pending.message!==text||pending.author!==author)pending={author,message:text,request_id:crypto.randomUUID()};
     sending=true;syncSend();status.textContent='Enviando…';
     try{

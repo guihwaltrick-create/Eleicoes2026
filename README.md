@@ -219,7 +219,8 @@ Projeto independente, sem vínculo com a Justiça Eleitoral.
 
 O botão Chat abre uma conversa compartilhada por todos os visitantes, inclusive
 no mapa em tela cheia. Não exige login: o nome informado é um apelido, sem
-verificação de identidade. A conversa carrega as últimas 100 mensagens e consulta
+verificação de identidade. Ao abrir, o visitante confirma o nome antes de entrar;
+ele fica fixo até recarregar a página, mesmo fechando e reabrindo o painel. A conversa carrega as últimas 100 mensagens e consulta
 novas mensagens a cada 4 segundos enquanto a aba está visível, inclusive com o
 painel fechado. O botão mostra um contador de mensagens novas recebidas com a
 conversa fechada e limpa o aviso ao abrir. O histórico da primeira consulta não
