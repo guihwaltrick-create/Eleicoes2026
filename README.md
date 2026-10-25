@@ -71,8 +71,10 @@ O painel permite criar, editar, ativar/desativar, ordenar e excluir publicaçõe
 Informações são somente texto; anúncios exigem um link HTTP(S), aberto em nova
 aba. Publicações ativas são exibidas em uma única linha à direita do online,
 com movimento da direita para a esquerda, inclusive no mapa em tela cheia.
-A faixa pausa ao passar o mouse ou focar um link; com movimento reduzido no
-dispositivo, fica disponível para rolagem horizontal manual. Atualizações
+A faixa pausa ao passar o mouse ou focar um link no computador. Em celulares,
+tocar ou focar o anúncio não mantém a faixa pausada. Um botão permite pausar
+ou retomar a rolagem; a escolha é mantida no navegador. Com movimento reduzido,
+a rolagem usa uma velocidade mais lenta. Atualizações
 aparecem em até cerca de 40 segundos (consulta a cada 30 segundos, cache de 10).
 
 Execute também as migrações, após a tabela de presença:

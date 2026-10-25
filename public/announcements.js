@@ -1,7 +1,22 @@
 (() => {
   const tickers=[...document.querySelectorAll('[data-announcement-ticker]')];
   if(!tickers.length)return;
-  let signature='',running=false;
+  let signature='',running=false,paused=false;
+  try{paused=localStorage.getItem('eleicoes2026:ticker-paused')==='true';}catch{}
+  const controls=tickers.map(ticker=>{
+    const button=document.createElement('button');button.type='button';button.className='ticker-control';button.hidden=true;
+    ticker.after(button);
+    button.onclick=()=>{paused=!paused;try{localStorage.setItem('eleicoes2026:ticker-paused',String(paused));}catch{}syncPlayback();};
+    return button;
+  });
+  function syncPlayback(){
+    tickers.forEach((ticker,index)=>{
+      ticker.classList.toggle('is-paused',paused);
+      const button=controls[index],label=paused?'Retomar anúncios e informações':'Pausar anúncios e informações';
+      button.textContent=paused?'▶':'Ⅱ';button.title=label;button.setAttribute('aria-label',label);button.setAttribute('aria-pressed',String(paused));
+    });
+  }
+  syncPlayback();
   function measure(){
     for(const ticker of tickers){
       const track=ticker.firstElementChild;if(!track||ticker.clientWidth===0)continue;
@@ -11,8 +26,8 @@
   }
   function safeLink(value){try{const url=new URL(value);return ['http:','https:'].includes(url.protocol)&&!url.username&&!url.password?url.href:null;}catch{return null;}}
   function render(items){
-    for(const ticker of tickers){
-      ticker.replaceChildren();ticker.hidden=!items.length;
+    for(const [index,ticker] of tickers.entries()){
+      ticker.replaceChildren();ticker.hidden=!items.length;controls[index].hidden=!items.length;
       if(!items.length)continue;
       const track=document.createElement('div');track.className='announcement-track';
       items.forEach((item,index)=>{

@@ -5,11 +5,17 @@
 .announcement-ticker[hidden]{display:none}
 .announcement-track{display:inline-flex;align-items:center;gap:18px;white-space:nowrap;max-width:none;will-change:transform;animation:announcement-scroll var(--ticker-duration,25s) linear infinite}
 .announcement-item{white-space:nowrap;flex-shrink:0}.announcement-item.is-ad{color:inherit;text-decoration:underline;text-decoration-color:#eab500;text-underline-offset:3px}.announcement-item.is-ad:focus-visible{outline:2px solid #eab500;outline-offset:2px}.announcement-separator{color:#eab500}
-.announcement-ticker:hover .announcement-track,.announcement-ticker:focus-within .announcement-track{animation-play-state:paused}
-@keyframes announcement-scroll{from{transform:translateX(var(--ticker-width,300px))}to{transform:translateX(-100%)}}
+@media(hover:hover) and (pointer:fine){.announcement-ticker:hover .announcement-track,.announcement-ticker:focus-within .announcement-track{animation-play-state:paused}}
+.announcement-ticker.is-paused .announcement-track{animation-play-state:paused}
+@keyframes announcement-scroll{from{transform:translate3d(var(--ticker-width,300px),0,0)}to{transform:translate3d(-100%,0,0)}}
 #mapaScreen .map-presence-strip{display:none}
 #mapaScreen.is-fullscreen .map-presence-strip{display:flex;grid-column:1 / -1;flex-shrink:0;min-height:20px;margin:0}
 #mapaScreen.is-fullscreen .map-presence-strip .online-presence{margin:0}
 #mapaScreen.is-fullscreen .map-presence-strip .announcement-ticker{color:#b7c8dc}
 #mapaScreen.is-fullscreen .map-canvas{grid-template-rows:auto minmax(0,1fr)}
-@media(prefers-reduced-motion:reduce){.announcement-ticker{overflow:auto;scrollbar-width:none;mask-image:none}.announcement-track{animation:none;transform:none;will-change:auto}}
+@media(prefers-reduced-motion:reduce){.announcement-track{animation-duration:max(45s,var(--ticker-duration,25s))}}
+
+.ticker-control{display:inline-flex;align-items:center;justify-content:center;flex:0 0 26px;width:26px;min-height:24px;padding:0;border:1px solid #bac3cf;border-radius:5px;background:transparent;color:#53647a;font:600 12px system-ui,sans-serif;cursor:pointer}
+.ticker-control[hidden]{display:none}
+.ticker-control:focus-visible{outline:2px solid #eab500;outline-offset:2px}
+#mapaScreen.is-fullscreen .map-presence-strip .ticker-control{color:#b7c8dc;border-color:#52637c}
