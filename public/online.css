@@ -2,4 +2,5 @@
 .online-presence::before{content:"";width:7px;height:7px;border-radius:50%;background:#8993a1;flex-shrink:0}
 .online-presence.is-connected::before{background:#169858;box-shadow:0 0 0 3px #16985815}
 .top .online-presence{margin-top:7px}
-#mapaScreen .map-fullscreen-legend .online-presence{color:#aebdd0}
+#mapaScreen .map-online-presence{display:none}
+#mapaScreen.is-fullscreen .map-online-presence{display:inline-flex;margin:0 0 10px;color:#aebdd0}
