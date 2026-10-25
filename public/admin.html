@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Administração · Eleições 2026</title>
+<link rel="icon" type="image/png" sizes="32x32" href="/icons/gw-blue-32.png">
+<link rel="stylesheet" href="/admin.css">
+<script defer src="/admin.js"></script>
+</head>
+<body>
+<main class="admin-wrap">
+  <header class="admin-header"><div class="brand"><img src="/icons/gw-blue-180.png" width="48" height="48" alt="GW Soluções Digitais"><div><span class="eyebrow">Eleições 2026</span><h1>Administração</h1></div></div><a class="back-link" href="/#mapa">← Voltar ao mapa</a></header>
+  <p id="adminStatus" class="status" role="status">Verificando acesso…</p>
+  <section id="loginPanel" class="panel login-panel" hidden>
+    <h2>Entrar</h2><p class="muted">Use o e-mail e a senha da sua conta autorizada.</p>
+    <form id="loginForm">
+      <label for="loginEmail">E-mail</label><input id="loginEmail" type="email" autocomplete="username" required maxlength="254">
+      <label for="loginPassword">Senha</label><input id="loginPassword" type="password" autocomplete="current-password" required maxlength="1024">
+      <button id="loginSubmit" class="primary" type="submit">Entrar</button>
+    </form>
+  </section>
+  <section id="editorPanel" hidden>
+    <div class="session-bar"><span>Conectado como <strong id="adminEmail"></strong></span><button id="logoutButton" type="button" class="secondary">Sair</button></div>
+    <section class="stats-grid" aria-label="Acessos ao sistema">
+      <article class="panel stat-card"><span class="eyebrow">Online agora</span><strong id="statsOnline">—</strong><span class="muted">Visitantes ativos nos últimos 2 minutos</span></article>
+      <article class="panel stat-card"><span class="eyebrow">Pico de visitantes online</span><strong id="statsPeak">—</strong><span class="muted">Maior quantidade simultânea registrada</span></article>
+      <article class="panel stat-card"><span class="eyebrow">Quando aconteceu</span><strong id="statsPeakAt" class="stat-date">—</strong><span class="muted">Horário de Brasília</span></article>
+    </section>
+    <p id="statsStatus" class="muted" role="status">Consultando o histórico de acessos…</p>
+    <div class="editor-layout">
+      <section class="panel">
+        <h2 id="formTitle">Nova publicação</h2><p class="muted">O texto aparecerá ao lado do contador online, em uma única linha.</p>
+        <form id="announcementForm">
+          <label for="announcementKind">Tipo</label><select id="announcementKind"><option value="info">Informação</option><option value="ad">Anúncio com link</option></select>
+          <div class="label-row"><label for="announcementMessage">Texto</label><span id="messageCount" class="muted">0/240</span></div>
+          <textarea id="announcementMessage" required maxlength="240" rows="4" placeholder="Digite a informação ou o texto do anúncio"></textarea>
+          <div id="linkField" hidden><label for="announcementUrl">Link de destino</label><input id="announcementUrl" type="url" maxlength="2000" placeholder="https://exemplo.com.br"><p class="field-note">Ao clicar no anúncio, o visitante abrirá esse endereço em uma nova aba.</p></div>
+          <label for="announcementOrder">Ordem de exibição</label><input id="announcementOrder" type="number" min="0" max="9999" step="1" value="0" required><p class="field-note">Os menores números aparecem primeiro.</p>
+          <label class="check"><input id="announcementActive" type="checkbox" checked> Publicação ativa</label>
+          <div class="preview"><span class="eyebrow">Prévia do texto</span><p id="announcementPreview">Sua publicação aparecerá aqui.</p></div>
+          <div class="form-actions"><button id="saveButton" type="submit" class="primary">Salvar publicação</button><button id="cancelEditButton" type="button" class="secondary" hidden>Cancelar edição</button></div>
+        </form>
+      </section>
+      <section class="panel publications-panel"><div class="list-title"><h2>Publicações</h2><button id="reloadButton" class="secondary" type="button">Atualizar lista</button></div><p class="muted">Publicações ativas aparecem no sistema em até cerca de 40 segundos.</p><div id="announcementList" class="publication-list"></div></section>
+    </div>
+  </section>
+</main>
+</body>
+</html>

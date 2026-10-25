@@ -7,6 +7,8 @@ const { createMapService, STATE_IDS } = require("./map-data");
 const { createExteriorService } = require("./exterior-data");
 const { createPresenceHandler } = require("./online-presence");
 const onlinePresence = createPresenceHandler();
+const { createAnnouncementsHandler } = require('./announcements');
+const announcements = createAnnouncementsHandler();
 
 const { electionFor } = require("./elections");
 const { createResultCache } = require("./result-cache");
@@ -129,6 +131,7 @@ function send(res, code, type, body) {
 const server = http.createServer(async (req,res) => {
   const u = new URL(req.url, `http://${req.headers.host}`);
   if (u.pathname === '/api/online') return onlinePresence(req, res);
+  if (u.pathname === '/api/announcements' || u.pathname.startsWith('/api/admin/')) return announcements(req,res,u.pathname);
   let election;
   if(u.pathname.startsWith("/api/")){
     try {election=electionFor(u.searchParams.get("turno")??"2");}
@@ -171,7 +174,12 @@ const server = http.createServer(async (req,res) => {
     } catch(e){ return send(res,500,"application/json",JSON.stringify({error:e.message})); }
   }
 
-  let file = u.pathname === "/" ? "/index.html" : u.pathname;
+  let file = u.pathname === "/" ? "/index.html" : ['/admin','/admin/'].includes(u.pathname) ? '/admin.html' : u.pathname;
+  if (file === '/admin.html') {
+    res.setHeader('Content-Security-Policy', "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'");
+    res.setHeader('X-Frame-Options','DENY');
+    res.setHeader('Referrer-Policy','same-origin');
+  }
   const full = path.join(__dirname,"public",file);
   if (!full.startsWith(path.join(__dirname,"public"))) return send(res,403,"text/plain","Forbidden");
   fs.readFile(full,(err,b)=>{

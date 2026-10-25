@@ -59,6 +59,42 @@ SQL: use o SQL Editor, a conexão PostgreSQL ou a
 Se o serviço estiver indisponível, o indicador mostra “Online indisponível”,
 sem inventar uma contagem ou interferir na apuração.
 
+## Administração, anúncios e informações
+
+Acesse `/admin` ou o link **Administração** no rodapé. O login usa e-mail e senha
+do Supabase Auth. Somente usuários com `app_metadata.eleicoes2026_admin = true`
+(atribuição administrativa no Supabase) podem administrar este site; usuários
+de outras aplicações do mesmo projeto não ganham acesso automaticamente.
+Não há cadastro público de administradores.
+
+O painel permite criar, editar, ativar/desativar, ordenar e excluir publicações.
+Informações são somente texto; anúncios exigem um link HTTP(S), aberto em nova
+aba. Publicações ativas são exibidas em uma única linha à direita do online,
+com movimento da direita para a esquerda, inclusive no mapa em tela cheia.
+A faixa pausa ao passar o mouse ou focar um link; com movimento reduzido no
+dispositivo, fica disponível para rolagem horizontal manual. Atualizações
+aparecem em até cerca de 40 segundos (consulta a cada 30 segundos, cache de 10).
+
+Execute também as migrações, após a tabela de presença:
+
+1. `supabase/migrations/202610250002_announcements.sql` cria a tabela de publicações.
+2. `supabase/migrations/202610250003_online_peak.sql` cria o histórico do pico e
+   atualiza a função de presença existente.
+
+As tabelas são privadas (RLS e privilégios revogados para `anon`/`authenticated`).
+O servidor valida cada acesso administrativo pelo Supabase Auth e usa a chave
+privada apenas no servidor. A sessão fica em cookie criptografado `HttpOnly`,
+`SameSite=Strict`, `Secure` em HTTPS, com duração de 8 horas e renovação do token
+de acesso no servidor. Nenhuma senha ou token de sessão é salvo no JavaScript
+ou no armazenamento local do navegador.
+
+O painel mostra online agora, pico simultâneo registrado, e a data/hora desse
+pico em **America/Sao_Paulo**. A estatística é persistida pelo heartbeat, só
+muda quando um recorde maior é observado e mantém o primeiro horário em caso
+de empate. O histórico começa em `tracking_since`, ao ativar a migração; não
+reconstrói picos anteriores. `/api/admin/stats` é exclusivo do administrador.
+O indicador atual considera a mesma janela de 2 minutos do contador público.
+
 ## Turnos e cache
 
 A página sempre abre no **2º turno** (eleição 6258). O seletor no início altera
