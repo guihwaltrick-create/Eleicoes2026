@@ -117,8 +117,8 @@ th{background:#fafafa}.group-total{color:var(--text)}
 <body data-turn="2"><main class="wrap">
 <div class="top"><div><h1>Apuração Presidencial — 2026</h1><div class="sub" id="updated">Carregando dados oficiais do TSE…</div><span class="online-presence" data-online-presence role="status">Consultando visitantes…</span></div><button class="btn" onclick="load()">Atualizar</button></div>
 <div class="turn-selector"><label for="electionTurn">Turno da eleição</label><select id="electionTurn"><option value="1">1º turno</option><option value="2" selected>2º turno</option></select><span id="turnStatus">2º turno · atualização automática a cada minuto</span></div>
-<nav class="tabs" aria-label="Telas"><a href="#apuracao" id="tabApuracao">Apuração atual</a><a href="#projecao" id="tabProjecao">Projeção</a><a href="#mapa" id="tabMapa">Mapa</a><a href="#sobre" id="tabSobre">Sobre</a></nav>
-<div id="apuracaoScreen"><div class="grid">
+<nav class="tabs" aria-label="Telas"><a href="#mapa" id="tabMapa" class="active" aria-current="page">Mapa</a><a href="#apuracao" id="tabApuracao">Apuração atual</a><a href="#projecao" id="tabProjecao">Projeção</a><a href="#sobre" id="tabSobre">Sobre</a></nav>
+<div id="apuracaoScreen" hidden><div class="grid">
   <section class="card">
     <div class="kicker">Brasil · votos válidos</div><div class="big" id="validos">—</div>
     <div class="kicker">Seções totalizadas <strong id="pst">—</strong></div><div class="progress"><i id="bar" style="width:0"></i></div>
@@ -153,7 +153,7 @@ th{background:#fafafa}.group-total{color:var(--text)}
  <div class="toolbar"><div><h2>Projeção por estado</h2><div class="sub">Ordenado pelo volume estimado de votos ainda por apurar.</div></div></div>
  <div class="tablebox"><table><thead><tr><th>UF</th><th>Apurado</th><th>Válidos atuais</th><th>Válidos projetados</th><th>Restantes estimados</th><th>Lula · votos projetados</th><th>Flávio · votos projetados</th><th class="first-round-only">Demais candidatos · projeção</th></tr></thead><tbody id="projectionRows"></tbody></table></div>
 </section>
-<section id="mapaScreen" hidden>
+<section id="mapaScreen">
  <div class="toolbar"><div><h2>Mapa da apuração</h2><div class="sub">Liderança entre Lula e Flávio por estado e município · votos já apurados</div></div></div>
  <div class="map-controls"><label for="mapState">Local</label><select id="mapState"><option value="br">Brasil · estados</option></select><button class="btn" id="mapBack" type="button">Ver Brasil</button><button class="btn" id="mapRefresh" type="button">Atualizar mapa</button></div>
  <div class="map-legend"><span><i style="background:#1f5fae"></i>Flávio à frente</span><span><i style="background:#c62828"></i>Lula à frente</span><span><i style="background:#b8c2cd"></i>Empate / sem votos</span><span><i style="background:#e4e9ef"></i>Dados indisponíveis</span></div>
@@ -266,7 +266,7 @@ function render(){
  errors.innerHTML=DATA.errors.length?`<div class="error"><b>Arquivos não carregados:</b> ${DATA.errors.join(" · ")}</div>`:"";
 }
 function showScreen(){
- const screen=location.hash==="#mapa"?"mapa":location.hash==="#sobre"?"sobre":location.hash==="#projecao"?"projecao":"apuracao";
+ const screen=location.hash==="#apuracao"?"apuracao":location.hash==="#sobre"?"sobre":location.hash==="#projecao"?"projecao":"mapa";
  for(const [name,tab] of [["apuracao","tabApuracao"],["projecao","tabProjecao"],["sobre","tabSobre"],["mapa","tabMapa"]]){
   document.getElementById(name+"Screen").hidden=name!==screen;
   const link=document.getElementById(tab);
