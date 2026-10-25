@@ -183,6 +183,23 @@
   document.addEventListener('pointerdown',event=>{if(!el('mapTooltip').contains(event.target)&&!el('electionMap').contains(event.target))hidePopup();});
   document.addEventListener('touchmove',hidePopup,{passive:true});
   window.addEventListener('resize',()=>{const mobile=window.matchMedia('(max-width:600px)').matches;if(mobile!==mobileLayout){hidePopup();mobileLayout=mobile;if(geography){draw();detail();}}else if(popupAnchor)positionPopup(Math.min(popupAnchor.x,innerWidth),Math.min(popupAnchor.y,innerHeight));});
+  let lastTouchAt=-Infinity;
+  el('mapaScreen').addEventListener('touchstart',()=>{lastTouchAt=Date.now();},{passive:true});
+  function touchActivation(event){
+    return mobileLayout||event?.pointerType==='touch'||event?.pointerType==='pen'||event?.sourceCapabilities?.firesTouchEvents||Date.now()-lastTouchAt<1000||window.matchMedia('(pointer:coarse)').matches;
+  }
+  function activateState(id,event){
+    if(!touchActivation(event)){el('mapState').value=id.toLowerCase();select();return;}
+    selectedState=selectedState===id?null:id;
+    hidePopup();detail();
+    if(!selectedState)return;
+    const feature=stateGeography?.features.find(feature=>feature.properties.uf===id);
+    const rect=event?.currentTarget?.getBoundingClientRect();
+    showPopup(recordsById.get(id),feature?.properties.nome||id,id,{
+      clientX:event?.clientX||rect?.x||innerWidth/2,
+      clientY:event?.clientY||rect?.y||innerHeight/2
+    });
+  }
   function togglePlace(id){
     selectedCity=selectedCity===id?null:id;
     hidePopup();
@@ -241,8 +258,16 @@
       path.addEventListener('pointerleave',event=>{if(event.pointerType!=='touch')scheduleHidePopup();});
       path.addEventListener('focus',()=>{const rect=path.getBoundingClientRect();showPopup(recordsById.get(id),name,id,{clientX:rect.x+rect.width/2,clientY:rect.y+rect.height/2});});
       path.addEventListener('blur',scheduleHidePopup);
-      const choose=()=> {if(stateView()){el('mapState').value=id.toLowerCase();select();}else {togglePlace(id);}};
-      path.addEventListener('click',event=>{if(moved)return;if(event.pointerType==='touch'){if(stateView()){selectedState=selectedState===id?null:id;hidePopup();detail();if(!selectedState)return;}else{togglePlace(id);if(!selectedCity)return;}showPopup(recordsById.get(id),name,id,event);}else choose();});path.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose();}});
+      const choose=event=>{
+        if(stateView()){activateState(id,event);return;}
+        togglePlace(id);
+        if(selectedCity&&touchActivation(event)){
+          const rect=path.getBoundingClientRect();
+          showPopup(recordsById.get(id),name,id,{clientX:event.clientX||rect.x+rect.width/2,clientY:event.clientY||rect.y+rect.height/2});
+        }
+      };
+      path.addEventListener('click',event=>{if(!moved)choose(event);});
+      path.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();choose(event);}});
       svg.append(path);
     }
     if(nationalCityView()&&stateGeography){const outlines=document.createElementNS(NS,'g');outlines.setAttribute('class','map-state-outlines');outlines.setAttribute('aria-hidden','true');for(const feature of stateGeography.features){const path=document.createElementNS(NS,'path');path.setAttribute('d',shapePath(feature));outlines.append(path);}svg.append(outlines);}
@@ -291,7 +316,7 @@
         button.append(values);
         const progress=document.createElement('small');progress.textContent=percent(place.row.secoesPct)+' apurado · '+nf.format(place.row.validos)+' votos válidos'+(place.row.desatualizado?' · Atualização pendente':place.row.parcial?' · Parcial: '+place.row.locaisRecebidos+'/'+place.row.locaisTotal+' localidades':'');button.append(progress);
       }else{const unavailable=document.createElement('small');unavailable.textContent='Resultados indisponíveis';button.append(unavailable);}
-      button.onclick=()=>{if(stateView()){el('mapState').value=place.id.toLowerCase();select();}else{togglePlace(place.id);}};
+      button.onclick=event=>{if(stateView())activateState(place.id,event);else togglePlace(place.id);};
       el('mapPlaces').append(button);
     }
     if(nationalCityView()&&filtered.length>listLimit){const more=document.createElement('button');more.type='button';more.className='map-load-more';more.textContent='Mostrar mais cidades ('+Math.min(listLimit,filtered.length)+' de '+filtered.length+')';more.onclick=()=>{listLimit+=120;list();};el('mapPlaces').append(more);}
