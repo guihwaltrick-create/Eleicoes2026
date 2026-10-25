@@ -114,6 +114,7 @@ th{background:#fafafa}.group-total{color:var(--text)}
 <link rel="stylesheet" href="/map-fullscreen.css">
 <link rel="stylesheet" href="/online.css">
 <link rel="stylesheet" href="/announcements.css">
+<link rel="stylesheet" href="/chat-preview.css">
 </head>
 <body data-turn="2"><main class="wrap">
 <div class="top"><div><h1>Apuração Presidencial — 2026</h1><div class="sub" id="updated">Carregando dados oficiais do TSE…</div><div class="presence-strip"><span class="online-presence" data-online-presence role="status">Consultando visitantes…</span><div class="announcement-ticker" data-announcement-ticker role="region" aria-label="Anúncios e informações" hidden></div></div></div><button class="btn" onclick="load()">Atualizar</button></div>
@@ -313,4 +314,4 @@ document.getElementById("electionTurn").addEventListener("change",event=>{
 });
 window.addEventListener("hashchange",showScreen); showScreen();
 load(); setInterval(()=>load({background:true}),60000); setInterval(()=>{if(DATA)updateFileTime();},15000);
-</script></body></html>
+</script><script src="/chat-preview.js"></script></body></html>
