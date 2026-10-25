@@ -47,6 +47,7 @@ As respostas normalizadas incluem `turno` e `eleicao`. Caches e requisições em
 separados por turno para impedir mistura de resultados.
 
 - `GET /api/resultados`: Brasil e 27 UFs normalizados.
+- `GET /api/municipios/catalogo?turno=2`: catálogo nacional de municípios, agrupado por UF, com códigos TSE e IBGE.
 - `GET /api/municipios?uf=ac`: resultados de todos os municípios da UF, com códigos TSE e IBGE.
 - `GET /api/municipios?uf=ac&pagina=0`: lote de até 100 municípios (páginas a partir de zero); a interface usa essa opção para UFs grandes.
 - `GET /api/mapa?uf=br`: limites dos estados em GeoJSON.
@@ -62,7 +63,27 @@ As fotos dos candidatos são fornecidas pelo TSE. A marca GW Soluções Digitais
 
 ## Mapa e municípios
 
-Abra a aba **Mapa** e selecione um estado no mapa ou no seletor. Clique em uma
+Abra a aba **Mapa** e selecione um estado no mapa ou no seletor.
+Os nomes dos 27 estados/DF aparecem na visão nacional, com linhas de indicação
+para os estados menores. O seletor compacto **Brasil · Estados / Cidades** fica
+no canto superior do próprio mapa. **Cidades** mostra os municípios de todo o
+Brasil, com os mesmos percentuais, cores graduais, busca e popups.
+
+Os resultados nacionais por cidade chegam em lotes de até 100 municípios; o
+progresso aparece acima do mapa e as cores são preenchidas conforme cada lote
+chega. Trocar de visão interrompe a fila e preserva os lotes já recebidos. O
+primeiro turno fica em cache; o segundo é atualizado sem sobrepor carregamentos.
+A lista nacional renderiza inicialmente 120 cidades e permite buscar ou mostrar
+mais, para manter a interface leve.
+
+A carga nacional consulta o acompanhamento oficial EA15 por UF: municípios
+confirmados com zero seções totalizadas são mostrados como aguardando apuração,
+sem requisitar um EA20 para cada cidade. Com seções apuradas, os votos vêm do
+EA20 municipal; arquivos com horário confirmado e inalterado são reutilizados.
+Se o acompanhamento falhar, a consulta usa os arquivos municipais normais.
+Municípios ainda não consultados ou com erro não recebem liderança inventada.
+
+ Clique em uma
 cidade, ou busque seu nome na lista, para consultar os cartões de votação local.
 O mapa usa fundo escuro com contexto geográfico, resumo dos candidatos à esquerda
 e painel de estados à direita. Ao selecionar um estado, o painel lista suas cidades.

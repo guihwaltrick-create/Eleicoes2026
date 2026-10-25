@@ -128,6 +128,12 @@ const server = http.createServer(async (req,res) => {
     try {election=electionFor(u.searchParams.get("turno")??"2");}
     catch(e){return send(res,400,"application/json",JSON.stringify({error:e.message}));}
   }
+  if(u.pathname==="/api/municipios/catalogo"){
+    try {
+      const estados=await mapService.catalog(election.turno);
+      return send(res,200,"application/json; charset=utf-8",JSON.stringify({turno:election.turno,eleicao:election.codigo,estados,total:estados.reduce((sum,state)=>sum+state.municipios.length,0)}));
+    }catch(e){return send(res,502,"application/json",JSON.stringify({error:e.message}));}
+  }
   if (["/api/municipios", "/api/mapa"].includes(u.pathname)) {
     const uf = (u.searchParams.get("uf") || (u.pathname === "/api/mapa" ? "br" : "")).toLowerCase();
     if (!Object.hasOwn(STATE_IDS,uf) && !(uf === "br" && u.pathname === "/api/mapa")) return send(res,400,"application/json",JSON.stringify({error:"UF inválida"}));
@@ -135,7 +141,7 @@ const server = http.createServer(async (req,res) => {
       const pageParam = u.searchParams.get("pagina");
       const page = pageParam === null ? null : Number(pageParam);
       if (page !== null && (!/^\d+$/.test(pageParam) || !Number.isSafeInteger(page) || page > 100)) return send(res,400,"application/json",JSON.stringify({error:"Página inválida"}));
-      const data = await (u.pathname === "/api/mapa" ? mapService.geometry(uf) : mapService.municipalities(uf, page, election.turno));
+      const data = await (u.pathname === "/api/mapa" ? mapService.geometry(uf) : mapService.municipalities(uf, page, election.turno, {national:u.searchParams.get("nacional")==="1"}));
       return send(res,200,"application/json; charset=utf-8",JSON.stringify(data));
     } catch(e) { return send(res,502,"application/json",JSON.stringify({error:e.message})); }
   }
@@ -159,7 +165,7 @@ const server = http.createServer(async (req,res) => {
   fs.readFile(full,(err,b)=>{
     if(err) return send(res,404,"text/plain","Not found");
     const ext=path.extname(full);
-    const type=ext===".html"?"text/html; charset=utf-8":ext===".js"?"text/javascript":ext===".css"?"text/css; charset=utf-8":ext===".png"?"image/png":[".jpg",".jpeg"].includes(ext)?"image/jpeg":"text/plain";
+    const type=ext===".html"?"text/html; charset=utf-8":ext===".js"?"text/javascript":ext===".geojson"?"application/geo+json":ext===".json"?"application/json; charset=utf-8":ext===".css"?"text/css; charset=utf-8":ext===".png"?"image/png":[".jpg",".jpeg"].includes(ext)?"image/jpeg":"text/plain";
     if (ext === ".html") {
       // URLs absolutas permitem que os aplicativos encontrem a imagem de compartilhamento.
       const protocol = req.headers["x-forwarded-proto"] === "https" || req.socket.encrypted ? "https" : "http";

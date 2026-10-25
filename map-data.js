@@ -3,7 +3,7 @@ const {electionFor} = require('./elections');
 const {createResultCache} = require('./result-cache');
 
 function createMapService({fetchJSON, normalize, resultCache = createResultCache()}) {
-  const cache = new Map(), pending = new Map();
+  const cache = new Map(), pending = new Map(), latestCities = new Map();
   function cached(key, ttl, loader) {
     const hit = cache.get(key);
     if (hit && Date.now() - hit.at < ttl) return Promise.resolve(hit.value);
@@ -15,16 +15,26 @@ function createMapService({fetchJSON, normalize, resultCache = createResultCache
   const catalog = (turn = '2') => {
     const election=electionFor(turn);
     return resultCache('catalog:'+election.codigo, election.turno===1?Infinity:86400000, async () => {
-    const raw = await fetchJSON(`${election.root}/config/mun-e${election.arquivo}-cm.json`, true);
+    let raw;
+    for(let attempt=0;attempt<2;attempt++){
+      try{raw=await fetchJSON(`${election.root}/config/mun-e${election.arquivo}-cm.json`,true);break;}
+      catch(e){if(attempt===1)throw e;}
+    }
     if (!Array.isArray(raw.abr)) throw new Error('Catálogo de municípios do TSE inválido');
     return raw.abr.filter(s => Object.hasOwn(STATE_IDS,s.cd)).map(s => ({uf:s.cd, nome:s.ds, municipios:s.mu.map(m => ({codigo:String(m.cd).padStart(5,'0'),ibge:String(m.cdi),nome:m.nm}))}));
   },{persist:election.turno===1});
   };
-  const municipalities = (uf, page = null, turn = '2') => {
+  const progress = (uf, election) => cached('progress:'+election.codigo+':'+uf,30000,async()=>{
+    const raw=await fetchJSON(`${election.root}/dados/${uf}/${uf}-e${election.arquivo}-ab.json`,true);
+    if(!Array.isArray(raw.abr))throw new Error('Acompanhamento municipal inválido');
+    return {raw,entries:new Map(raw.abr.filter(entry=>entry.tpabr==='mun').map(entry=>[String(entry.cdabr).padStart(5,'0'),entry]))};
+  });
+  const municipalities = (uf, page = null, turn = '2', {national = false} = {}) => {
     const election=electionFor(turn);
     return resultCache('municipal:'+election.codigo+':'+uf+':'+page, election.turno===1?Infinity:30000, async () => {
     const state = (await catalog(turn)).find(s => s.uf === uf);
     if (!state) throw new Error('UF ausente no catálogo do TSE');
+    const progressIndex=national?await progress(uf,election).catch(()=>null):null;
     const pageSize = 100;
     const targets = page === null ? state.municipios : state.municipios.slice(page * pageSize, (page + 1) * pageSize);
     let next = 0;
@@ -34,8 +44,18 @@ function createMapService({fetchJSON, normalize, resultCache = createResultCache
       while (next < targets.length) {
         const index = next++, city = targets[index];
         try {
+          const entry=progressIndex?.entries.get(city.codigo);
+          if(entry?.s?.st==='0'&&Number(entry.s.ts)>0){
+            results[index]={...normalize({s:entry.s,v:{vvc:'0'},dg:progressIndex.raw.dg,hg:progressIndex.raw.hg},uf),...city,aguardandoApuracao:true,fonteDetalhe:'TSE EA15'};
+            continue;
+          }
+          const stamp=entry?.dt&&entry?.ht?entry.dt+' '+entry.ht:null;
+          const cacheKey=election.codigo+':'+uf+':'+city.codigo;
+          const previous=latestCities.get(cacheKey);
+          if(stamp&&previous?.stamp===stamp){results[index]=previous.value;continue;}
           const raw = await fetchJSON(`${election.root}/dados/${uf}/${uf}${city.codigo}-c0001-e${election.arquivo}-u.json`, true);
           results[index] = {...normalize(raw, uf), ...city};
+          if(stamp&&raw.dt+' '+raw.ht===stamp)latestCities.set(cacheKey,{stamp,value:results[index]});
         } catch (e) {
           results[index] = {...city, uf:uf.toUpperCase(), indisponivel:true};
           errors.push(`${city.nome}: ${e.message}`);

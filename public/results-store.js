@@ -3,7 +3,7 @@
   const prefix='eleicoes2026:primeiro-turno:v1:';
   function complete(data){
     if(data.errors?.length)return false;
-    if(Array.isArray(data.estados))return Boolean(data.brasil&&data.estados.length===27);
+    if(Array.isArray(data.estados))return Boolean((data.brasil&&data.estados.length===27)||(data.total&&data.estados.every(state=>Array.isArray(state.municipios))));
     return Array.isArray(data.municipios);
   }
   async function get(path,turn='2'){
