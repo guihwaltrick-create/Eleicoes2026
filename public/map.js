@@ -93,10 +93,10 @@
   }
   function ranking(row, label) {
     el('mapLocation').textContent = label;
-    el('mapCards').replaceChildren();
     el('mapProjectionToggle').hidden=true;
     el('mapOthers').textContent='';
     if (!row || row.indisponivel) {
+      el('mapCards').replaceChildren();
       el('mapDetail').textContent = 'Resultados indisponíveis para este local.';
       return;
     }
@@ -108,13 +108,25 @@
     ].sort((a,b) => b.votes-a.votes);
     const others=items.find(item=>item.key==='others');
     el('mapOthers').textContent=turn==='1'?'Demais candidatos · '+percent(others.pct)+' · '+nf.format(others.votes)+' votos':'';
-    for (const item of items.filter(item=>item.key!=='others')) {
-      const card = document.createElement('div'); card.className = 'map-candidate '+item.key;
-      if (item.photo) {const photo = document.createElement('img');photo.src=item.photo;photo.alt=item.name;photo.className='map-candidate-photo';card.append(photo);}
-      for (const [tag,cls,text] of [['div','map-candidate-name',item.name],['div','map-candidate-party',item.party],['b','map-candidate-percent',percent(item.pct)],['div','map-candidate-votes',nf.format(item.votes)+' votos']]) {
-        const node = document.createElement(tag);node.className=cls;node.textContent=text;card.append(node);
+    for (const [index,item] of items.filter(item=>item.key!=='others').entries()) {
+      const cards=el('mapCards');
+      let card=cards.querySelector('.map-candidate.'+item.key);
+      if(!card){
+        card=document.createElement('div');card.className='map-candidate '+item.key;
+        const photo=document.createElement('img');photo.src=item.photo;photo.alt=item.name;photo.className='map-candidate-photo';card.append(photo);
+        for(const [tag,cls] of [['div','map-candidate-name'],['div','map-candidate-party'],['b','map-candidate-percent'],['div','map-candidate-votes']]){
+          const node=document.createElement(tag);node.className=cls;card.append(node);
+        }
+        const estimate=document.createElement('div');estimate.className='map-candidate-projection';estimate.id='mapProjection-'+item.key;card.append(estimate);
+        const progress=document.createElement('div');progress.className='map-candidate-progress';progress.append(document.createElement('i'));card.append(progress);
+        cards.append(card);
       }
-      const estimate=document.createElement('div');estimate.className='map-candidate-projection';estimate.id='mapProjection-'+item.key;estimate.hidden=!projectionExpanded;
+      // Mantém o card e a foto montados durante as atualizações parciais.
+      card.style.order=index;
+      for(const [cls,text] of [['map-candidate-name',item.name],['map-candidate-party',item.party],['map-candidate-percent',percent(item.pct)],['map-candidate-votes',nf.format(item.votes)+' votos']]){
+        const node=card.querySelector('.'+cls);if(node.textContent!==text)node.textContent=text;
+      }
+      const estimate=card.querySelector('.map-candidate-projection');estimate.replaceChildren();estimate.hidden=!projectionExpanded;
       if(projection){
         const label=document.createElement('span');label.textContent=projection.partial?'Projeção parcial':'Projeção';
         const value=document.createElement('strong');value.textContent=percent(projection[item.key]/projection.total*100);
@@ -125,9 +137,7 @@
         estimate.textContent='Projeção indisponível';
         estimate.title='Aguardando votos válidos e seções apuradas para calcular a estimativa.';
       }
-      card.append(estimate);
-      const progress=document.createElement('div');progress.className='map-candidate-progress';const fill=document.createElement('i');fill.style.width=Math.min(100,item.pct)+'%';progress.append(fill);card.append(progress);
-      el('mapCards').append(card);
+      card.querySelector('.map-candidate-progress i').style.width=Math.min(100,item.pct)+'%';
     }
     el('mapProjectionToggle').hidden=false;
     syncProjectionVisibility();
@@ -442,11 +452,13 @@
     finally{if(token===version)setLoading(false);}
   }
   async function select() {
+    const previousRegion=uf;
     uf=el('mapState').value;const region=uf, token=++version;
     el('mapDetailBack').hidden=region==='br';
     syncViewButtons();listLimit=120;
     hidePopup();selectedCity=null;selectedState=null;el('electionMap').classList.remove('has-selection');el('mapClearCity').hidden=true;cities=null;geography=null;setLoading(true);
-    el('mapSearch').value='';el('mapPlaces').replaceChildren();el('electionMap').replaceChildren();el('mapCards').replaceChildren();el('mapProjectionToggle').hidden=true;
+    el('mapSearch').value='';el('mapPlaces').replaceChildren();el('electionMap').replaceChildren();
+    if(region!==previousRegion){el('mapCards').replaceChildren();el('mapProjectionToggle').hidden=true;}
     el('mapLocation').textContent=region==='br'?'Brasil':el('mapState').selectedOptions[0].textContent;
     el('mapDetail').textContent='';el('mapOthers').textContent='';el('mapSource').textContent='';list();
     el('mapStatus').textContent=exteriorView()?'Carregando mapa e votação no exterior…':nationalCityView()?'Carregando Brasil · Cidades…':region==='br'?'Carregando mapa dos estados…':'Carregando limites e resultados dos municípios. Estados com muitas cidades podem levar cerca de um minuto…';
