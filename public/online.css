@@ -3,4 +3,5 @@
 .online-presence.is-connected::before{background:#169858;box-shadow:0 0 0 3px #16985815}
 .top .online-presence{margin-top:7px}
 #mapaScreen .map-online-presence{display:none}
-#mapaScreen.is-fullscreen .map-online-presence{display:inline-flex;margin:0 0 10px;color:#aebdd0}
+#mapaScreen.is-fullscreen .map-scoreboard{padding-top:0}
+#mapaScreen.is-fullscreen .map-online-presence{display:flex;justify-content:flex-start;text-align:left;margin:0 0 6px;color:#aebdd0}
