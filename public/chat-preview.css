@@ -20,3 +20,12 @@
 @media(max-width:600px){.chat-preview{right:max(12px,env(safe-area-inset-right));bottom:max(12px,env(safe-area-inset-bottom))}.chat-panel{width:min(350px,calc(100vw - 24px));height:470px;max-height:calc(100dvh - 94px)}.chat-launcher{min-height:44px;padding:0 15px}.chat-name input,.chat-compose input{font-size:16px}}
 
 .chat-status{margin:0;padding:7px 16px;color:#b6c7db;font-size:10px;line-height:1.4;border-bottom:1px solid #ffffff0a}
+
+.chat-launcher{position:relative}
+.chat-unread{display:inline-flex;align-items:center;justify-content:center;position:absolute;top:-7px;right:-5px;min-width:22px;height:22px;padding:0 5px;border:2px solid #172231;border-radius:12px;background:#e32643;color:#fff;font-size:11px;line-height:1;font-weight:700}
+.chat-unread[hidden],.chat-emoji-picker[hidden]{display:none}
+.chat-emoji-toggle{display:flex;align-items:center;justify-content:center;flex-shrink:0;width:36px;height:42px;padding:0;border:1px solid #4c607b;border-radius:10px;background:#1d2e44;color:#f6cb44;cursor:pointer}
+.chat-emoji-toggle[aria-expanded="true"]{background:#36506d}
+.chat-emoji-picker{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px;max-height:112px;overflow:auto;overscroll-behavior:contain;margin-bottom:9px;padding:6px;border:1px solid #41536a;border-radius:10px;background:#0f1c2e;flex-shrink:0}
+.chat-emoji-picker button{display:flex;align-items:center;justify-content:center;min-width:0;height:29px;padding:0;border:0;border-radius:5px;background:transparent;font:21px 'Apple Color Emoji','Segoe UI Emoji','Noto Color Emoji',sans-serif;cursor:pointer}
+.chat-emoji-picker button:hover{background:#304660}
