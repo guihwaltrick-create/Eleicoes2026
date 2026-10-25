@@ -58,8 +58,8 @@
  #mapaScreen .map-other-summary{font-size:10px;line-height:1.5;margin-top:9px}
  #mapaScreen .map-file-detail{font-size:9px;line-height:1.5;margin-top:5px}
  #mapaScreen .map-stage{border-radius:10px}
- #mapaScreen .map-canvas svg{width:100%;height:auto;aspect-ratio:1;touch-action:pan-y}
- #mapaScreen .map-canvas svg.is-zoomed{touch-action:none}
+ #mapaScreen .map-canvas #electionMap{width:100%;height:auto;aspect-ratio:1;touch-action:pan-y}
+ #mapaScreen .map-canvas #electionMap.is-zoomed{touch-action:none}
  #mapaScreen .map-tools{left:4px;top:4px;gap:6px}
  #mapaScreen .map-tools button{width:40px;height:40px;font-size:18px}
  #mapaScreen .map-canvas-hint{font-size:9px;padding:0 8px;bottom:2px}

@@ -2,7 +2,7 @@
 #mapaScreen .map-layout{display:grid;grid-template-columns:1fr;gap:16px;margin-top:16px}
 #mapaScreen .map-canvas{display:grid;grid-template-columns:280px minmax(0,1fr) 270px;gap:18px;padding:20px;position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% 40%,#30333d,#1c2029 80%);border:1px solid #384151;border-radius:20px;overflow:hidden;min-width:0}
 #mapaScreen .map-stage{position:relative;min-width:0;overflow:hidden;border-radius:12px}
-#mapaScreen .map-canvas svg{display:block;width:100%;height:800px;touch-action:none}
+#mapaScreen .map-canvas #electionMap{display:block;width:100%;height:800px;touch-action:none}
 #mapaScreen .map-geographic-context{pointer-events:none;fill:#363b45;stroke:#252a34;stroke-width:1}
 #mapaScreen .map-canvas path[data-id]{cursor:pointer;transition:fill .18s;outline:none}
 #mapaScreen .map-canvas path[data-id]:hover,#mapaScreen .map-canvas path[data-id]:focus,#mapaScreen .map-canvas path.is-selected{stroke:#fff;stroke-width:2;filter:brightness(1.16)}
@@ -91,14 +91,14 @@
  #mapaScreen .map-canvas{grid-template-columns:250px minmax(0,1fr);gap:16px;padding:16px}
  #mapaScreen .map-sidebar{grid-column:1 / -1;height:380px}
  #mapaScreen .map-places{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-content:start;gap:0 14px}
- #mapaScreen .map-canvas svg{height:680px}
+ #mapaScreen .map-canvas #electionMap{height:680px}
  #mapaScreen .map-candidate-name{font-size:10px}
  #mapaScreen .map-candidate-photo{width:64px;height:64px}
 }
 @media(max-width:700px){
  #mapaScreen .map-canvas{grid-template-columns:1fr;padding:14px;gap:16px;border-radius:14px}
  #mapaScreen .map-scoreboard{width:100%;max-width:390px;justify-self:center;padding-top:0}
- #mapaScreen .map-canvas svg{height:auto;aspect-ratio:1;min-height:0;width:100%}
+ #mapaScreen .map-canvas #electionMap{height:auto;aspect-ratio:1;min-height:0;width:100%}
  #mapaScreen .map-candidate{padding:14px 10px}
  #mapaScreen .map-candidate-name{font-size:12px}
  #mapaScreen .map-candidate-photo{width:68px;height:68px}
@@ -140,3 +140,21 @@
 #mapaScreen .map-state-outlines path{vector-effect:non-scaling-stroke}
 #mapaScreen .map-load-more{width:100%;min-height:44px;border:1px solid #536987;border-radius:8px;background:#243b57;color:#dbe7f8;margin-top:12px;padding:8px;cursor:pointer;font:inherit;font-size:11px}
 @media(max-width:700px){#mapaScreen .map-view-switch{top:4px;right:4px;padding:3px;gap:1px;font-size:10px}#mapaScreen .map-view-switch button{min-height:36px;padding:6px 9px}#mapaScreen .map-state-labels text{font-size:20px}#mapaScreen .map-state-labels .map-callout-label{font-size:17px}}
+
+#mapaScreen .map-detail-actions button{display:inline-flex;align-items:center;justify-content:center;min-width:40px;min-height:40px;padding:8px}
+#mapaScreen .map-detail-actions button svg{display:block;width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+
+@keyframes map-refresh-spin{to{transform:rotate(360deg)}}
+#mapaScreen #mapDetailRefresh.is-updating svg{animation:map-refresh-spin 1s linear infinite;transform-origin:center}
+#mapaScreen #mapDetailRefresh:disabled{cursor:progress;opacity:.8}
+@media(prefers-reduced-motion:reduce){#mapaScreen #mapDetailRefresh.is-updating svg{animation:none}}
+
+#mapaScreen .map-candidate-projection{grid-column:1 / -1;display:flex;align-items:baseline;justify-content:center;flex-wrap:wrap;gap:2px 5px;margin-top:10px;padding-top:7px;border-top:1px solid #ffffff12;color:#a9b9cf;font-size:9px;line-height:1.5;font-variant-numeric:tabular-nums;text-align:center}
+#mapaScreen .map-candidate-projection strong{font-size:11px;font-weight:600;color:#ced9e8}
+#mapaScreen .map-candidate-projection small{flex-basis:100%;font-size:9px;color:#94a5bd}
+
+#mapaScreen .map-candidate-projection[hidden],#mapaScreen .map-projection-toggle[hidden]{display:none}
+#mapaScreen .map-projection-toggle{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:36px;margin:5px 0 0;padding:5px 10px;border:0;border-radius:6px;background:transparent;color:#a9b9cf;font:500 10px Inter,system-ui,sans-serif;cursor:pointer}
+#mapaScreen .map-projection-toggle:hover{background:#ffffff0a;color:#edf4ff}
+#mapaScreen .map-projection-toggle svg{display:block;flex:0 0 14px;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#mapaScreen .map-projection-toggle[aria-expanded="true"] svg{transform:rotate(180deg)}

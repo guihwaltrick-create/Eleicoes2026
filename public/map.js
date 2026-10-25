@@ -18,6 +18,24 @@
   const stateView=()=>uf==='br'&&!nationalCityView();
   let turn='2';
   let national, geography, cities, uf = 'br', selectedCity = null, version = 0, loading = false, zoom = 1, moved = false;
+  const pendingUpdates=new Map();
+  function syncRefreshIndicator(){
+    const busy=loading||[...pendingUpdates.values()].includes(turn);
+    for(const id of ['mapDetailRefresh','mapRefresh']){
+      const button=el(id);
+      button.classList.toggle('is-updating',busy);
+      button.setAttribute('aria-busy',String(busy));
+      button.disabled=busy;
+    }
+    const label=busy?'Atualizando os resultados…':'Atualizar os resultados deste local';
+    el('mapDetailRefresh').title=label;
+    el('mapDetailRefresh').setAttribute('aria-label',label);
+  }
+  function setLoading(value){loading=value;syncRefreshIndicator();}
+  function beginUpdate(requestedTurn){
+    const request=Symbol();pendingUpdates.set(request,String(requestedTurn));syncRefreshIndicator();
+    return ()=>{pendingUpdates.delete(request);syncRefreshIndicator();};
+  }
   const leader = row => !row || row.indisponivel ? 'missing' : row.lula.votos > row.flavio.votos ? 'lula' : row.flavio.votos > row.lula.votos ? 'flavio' : 'tie';
   function regionColor(row){
     const ahead=leader(row);
@@ -43,14 +61,33 @@
     if (!meshes.has(region)) meshes.set(region,(region==='br-cities'?json('/br-cidades.geojson').then(data=>({...data,fonte:'IBGE · acervo Geodata BR (CC0), malha simplificada',features:data.features.filter(f=>f.geometry).map(f=>({...f,properties:{id:String(f.properties.id),nome:f.properties.name,uf:stateLabels.find(s=>String(f.properties.id).startsWith(String(stateIds[s.uf])))?.uf}}))})):json('/api/mapa?uf='+region)).catch(e => {meshes.delete(region);throw e;}));
     return meshes.get(region);
   }
+  let projectionExpanded=false;
+  function syncProjectionVisibility(){
+    const button=el('mapProjectionToggle');
+    button.setAttribute('aria-expanded',String(projectionExpanded));
+    button.querySelector('span').textContent=projectionExpanded?'Ocultar projeção':'Ver projeção';
+    el('mapCards').querySelectorAll('.map-candidate-projection').forEach(node=>{node.hidden=!projectionExpanded;});
+  }
+  function cardProjection(row){
+    if(!row||row.indisponivel||!(row.validos>0))return null;
+    if(uf==='br'&&!selectedCity){
+      const projection=national&&projectResults(national);
+      return projection?{lula:projection.lula,flavio:projection.flavio,total:projection.total,partial:projection.incomplete}:null;
+    }
+    const fraction=row.secoesTotal>0?row.secoesTotalizadas/row.secoesTotal:0;
+    if(!(fraction>0&&fraction<=1))return null;
+    return {lula:row.lula.votos/fraction,flavio:row.flavio.votos/fraction,total:row.validos/fraction,partial:false};
+  }
   function ranking(row, label) {
     el('mapLocation').textContent = label;
     el('mapCards').replaceChildren();
+    el('mapProjectionToggle').hidden=true;
     el('mapOthers').textContent='';
     if (!row || row.indisponivel) {
       el('mapDetail').textContent = 'Resultados indisponíveis para este local.';
       return;
     }
+    const projection=cardProjection(row);
     const items = [
       {name:'Lula',key:'lula',votes:row.lula.votos,pct:row.lula.percentual,photo:'/lula-sem-fundo.png',party:'PT'},
       {name:'Flávio Bolsonaro',key:'flavio',votes:row.flavio.votos,pct:row.flavio.percentual,photo:'/flavio-tse.jpg',party:'PL'},
@@ -64,9 +101,23 @@
       for (const [tag,cls,text] of [['div','map-candidate-name',item.name],['div','map-candidate-party',item.party],['b','map-candidate-percent',percent(item.pct)],['div','map-candidate-votes',nf.format(item.votes)+' votos']]) {
         const node = document.createElement(tag);node.className=cls;node.textContent=text;card.append(node);
       }
+      const estimate=document.createElement('div');estimate.className='map-candidate-projection';estimate.id='mapProjection-'+item.key;estimate.hidden=!projectionExpanded;
+      if(projection){
+        const label=document.createElement('span');label.textContent=projection.partial?'Projeção parcial':'Projeção';
+        const value=document.createElement('strong');value.textContent=percent(projection[item.key]/projection.total*100);
+        const votes=document.createElement('small');votes.textContent='≈ '+nf.format(Math.round(projection[item.key]))+' votos';
+        estimate.append(label,value,votes);
+        estimate.title='Estimativa matemática com a distribuição atual dos votos por seção apurada; não é previsão de vencedor.'+(uf==='br'&&!selectedCity?' Considera o avanço da apuração de cada estado.':' Neste local, o percentual é mantido e o total de votos é extrapolado.');
+      }else{
+        estimate.textContent='Projeção indisponível';
+        estimate.title='Aguardando votos válidos e seções apuradas para calcular a estimativa.';
+      }
+      card.append(estimate);
       const progress=document.createElement('div');progress.className='map-candidate-progress';const fill=document.createElement('i');fill.style.width=Math.min(100,item.pct)+'%';progress.append(fill);card.append(progress);
       el('mapCards').append(card);
     }
+    el('mapProjectionToggle').hidden=false;
+    syncProjectionVisibility();
     el('mapDetail').textContent = percent(row.secoesPct)+' das seções totalizadas · '+nf.format(row.validos)+' votos válidos'+(row.atualizadoEm ? ' · Arquivo: '+row.atualizadoEm : '');
   }
   let popupTimer, popupAnchor;
@@ -120,6 +171,10 @@
   document.addEventListener('touchmove',hidePopup,{passive:true});
   window.addEventListener('resize',()=>{const mobile=window.matchMedia('(max-width:600px)').matches;if(mobile!==mobileLayout){hidePopup();mobileLayout=mobile;if(geography){draw();detail();}}else if(popupAnchor)positionPopup(Math.min(popupAnchor.x,innerWidth),Math.min(popupAnchor.y,innerHeight));});
   function detail() {
+    const summaryLabel=uf==='br'?'Voltar ao resumo do Brasil':'Voltar ao resumo do estado';
+    el('mapClearCity').hidden=!selectedCity;
+    el('mapClearCity').title=summaryLabel;
+    el('mapClearCity').setAttribute('aria-label',summaryLabel);
     el('mapPlaces').querySelectorAll('button').forEach(button=>{const selected=!stateView()&&button.dataset.id===selectedCity;button.classList.toggle('is-selected',selected);button.setAttribute('aria-pressed',String(selected));});
     el('electionMap').querySelectorAll('path[data-id]').forEach(path=>path.classList.toggle('is-selected',path.dataset.id===selectedCity));
     const row = selectedCity ? cities?.municipios.find(c => c.ibge === selectedCity) : uf === 'br' ? national?.brasil : national?.estados.find(s => s.uf === uf.toUpperCase());
@@ -284,8 +339,8 @@
     uf=el('mapState').value;const region=uf, token=++version;
     el('mapDetailBack').hidden=region==='br';
     syncViewButtons();listLimit=120;
-    hidePopup();selectedCity=null;cities=null;geography=null;loading=true;
-    el('mapSearch').value='';el('mapPlaces').replaceChildren();el('electionMap').replaceChildren();el('mapCards').replaceChildren();
+    hidePopup();selectedCity=null;el('mapClearCity').hidden=true;cities=null;geography=null;setLoading(true);
+    el('mapSearch').value='';el('mapPlaces').replaceChildren();el('electionMap').replaceChildren();el('mapCards').replaceChildren();el('mapProjectionToggle').hidden=true;
     el('mapLocation').textContent=region==='br'?'Brasil':el('mapState').selectedOptions[0].textContent;
     el('mapDetail').textContent='';el('mapOthers').textContent='';el('mapSource').textContent='';list();
     el('mapStatus').textContent=nationalCityView()?'Carregando Brasil · Cidades…':region==='br'?'Carregando mapa dos estados…':'Carregando limites e resultados dos municípios. Estados com muitas cidades podem levar cerca de um minuto…';
@@ -296,7 +351,7 @@
       if(token!==version)return;
       geography=shape;cities=results;draw();list();detail();status();
     } catch(e) {if(token===version)el('mapStatus').textContent='Falha ao carregar: '+e.message+'. Use Atualizar mapa para tentar novamente.';}
-    finally {if(token===version){loading=false;el('mapStatus').setAttribute('aria-busy','false');}}
+    finally {if(token===version){setLoading(false);el('mapStatus').setAttribute('aria-busy','false');}}
   }
   function status() {
     const rows=stateView()?national?.estados||[]:cities?.municipios||[];
@@ -316,6 +371,54 @@
       await select();
     }catch(e){initialized=false;el('mapStatus').textContent='Falha ao carregar os estados: '+e.message;}
   }
+  const fullscreenScreen=el('mapaScreen'), fullscreenButton=el('mapFullscreen');
+  let nativeFullscreen=false, fullscreenFocus=null;
+  const fullscreenLegend=el('mapFullscreenLegend');
+  const fullscreenFooterNodes=[...fullscreenScreen.querySelectorAll('.map-legend,.map-intensity-legend,#mapStatus')].map(node=>{
+    const anchor=document.createComment('Posição original da legenda');
+    node.before(anchor);
+    return {node,anchor};
+  });
+  function setFullscreen(active){
+    if(active)fullscreenFocus=document.activeElement;
+    hidePopup();
+    fullscreenScreen.classList.toggle('is-fullscreen',active);
+    document.body.classList.toggle('map-fullscreen-open',active);
+    fullscreenButton.setAttribute('aria-pressed',String(active));
+    fullscreenButton.setAttribute('aria-label',active?'Sair da tela cheia':'Abrir mapa em tela cheia');
+    fullscreenButton.title=active?'Sair da tela cheia (Esc)':'Abrir mapa em tela cheia';
+    fullscreenButton.querySelector('path').setAttribute('d',active?'M3 8h5V3M21 8h-5V3M8 21v-5H3M16 21v-5h5':'M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5');
+    fullscreenLegend.hidden=!active;
+    for(const {node,anchor} of fullscreenFooterNodes){
+      if(active)fullscreenLegend.append(node);
+      else anchor.after(node);
+    }
+    if(active)fullscreenButton.focus({preventScroll:true});
+    else fullscreenFocus?.focus({preventScroll:true});
+  }
+  async function exitFullscreen(){
+    setFullscreen(false);
+    if(document.fullscreenElement===fullscreenScreen){
+      try{await document.exitFullscreen();}catch{} // A visualização local já foi restaurada.
+    }
+  }
+  fullscreenButton.onclick=async()=>{
+    if(fullscreenScreen.classList.contains('is-fullscreen'))return exitFullscreen();
+    setFullscreen(true);
+    // Mantém a visão expandida mesmo em celulares sem a API de tela cheia.
+    try{await fullscreenScreen.requestFullscreen?.();}catch{}
+  };
+  document.addEventListener('fullscreenchange',()=>{
+    const active=document.fullscreenElement===fullscreenScreen;
+    if(nativeFullscreen&&!active)setFullscreen(false);
+    nativeFullscreen=active;
+  });
+  document.addEventListener('keydown',event=>{
+    if(event.key==='Escape'&&fullscreenScreen.classList.contains('is-fullscreen'))exitFullscreen();
+  });
+  window.addEventListener('hashchange',()=>{
+    if(location.hash!=='#mapa'&&fullscreenScreen.classList.contains('is-fullscreen'))exitFullscreen();
+  });
   el('mapViewStates').onclick=()=>{nationalView='states';el('mapState').value='br';select();};
   el('mapViewCities').onclick=()=>{nationalView='cities';el('mapState').value='br';select();};
   el('mapState').onchange=select;el('mapSearch').oninput=()=>{listLimit=120;list();};
@@ -323,6 +426,7 @@
   el('mapBack').onclick=()=>{el('mapState').value='br';select();};
   el('mapDetailRefresh').onclick=()=>el('mapRefresh').click();
   el('mapDetailBack').onclick=()=>el('mapBack').click();
+  el('mapProjectionToggle').onclick=()=>{projectionExpanded=!projectionExpanded;syncProjectionVisibility();};
   el('mapClearCity').onclick=()=>{selectedCity=null;detail();};
   el('mapZoomIn').onclick=()=>setZoom(zoom*1.4);
   el('mapZoomOut').onclick=()=>setZoom(zoom/1.4);
@@ -334,16 +438,16 @@
   window.addEventListener('pointermove',e=>{if(!drag)return;hidePopup();if(Math.abs(e.clientX-drag.x)+Math.abs(e.clientY-drag.y)>5)moved=true;const svg=el('electionMap'),ratio=svg.viewBox.baseVal.width/svg.getBoundingClientRect().width;svg.setAttribute('viewBox',`${drag.box-(e.clientX-drag.x)*ratio} ${drag.top-(e.clientY-drag.y)*ratio} ${VIEW_WIDTH/zoom} ${VIEW_HEIGHT/zoom}`);});
   window.addEventListener('pointerup',()=>{drag=null;});
   window.addEventListener('pointercancel',()=>{drag=null;});
-  window.electoralMap={open,setTurn(value){
-    turn=String(value);version++;national=null;cities=null;selectedCity=null;loading=false;hidePopup();
+  window.electoralMap={open,beginUpdate,setTurn(value){
+    turn=String(value);version++;national=null;cities=null;selectedCity=null;setLoading(false);hidePopup();
     if(geography){draw();list();detail();}
     if(initialized&&!el('mapaScreen').hidden)select();
   },update(data){if(String(data.turno)!==turn)return;national=data;if(!el('mapaScreen').hidden&&initialized&&!loading){if(stateView()){draw();list();detail();if(geography)status();}else if(nationalCityView())refreshNationalCities();else refreshCities();}}};
   async function refreshNationalCities(){
     if(loading)return;
-    const token=version;loading=true;
+    const token=version;setLoading(true);
     try{await loadNationalCities(token);}catch(e){if(token===version)el('mapStatus').textContent='Falha na atualização nacional: '+e.message;}
-    finally{if(token===version)loading=false;}
+    finally{if(token===version)setLoading(false);}
   }
-  async function refreshCities(){const token=version,region=uf;loading=true;try{const data=await municipalResults(region,token);if(token!==version)return;cities=data;draw();list();detail();status();}catch(e){if(token===version)el('mapStatus').textContent='Falha na atualização municipal; exibindo a última consulta. '+e.message;}finally{if(token===version)loading=false;}}
+  async function refreshCities(){const token=version,region=uf;setLoading(true);try{const data=await municipalResults(region,token);if(token!==version)return;cities=data;draw();list();detail();status();}catch(e){if(token===version)el('mapStatus').textContent='Falha na atualização municipal; exibindo a última consulta. '+e.message;}finally{if(token===version)setLoading(false);}}
 })();
